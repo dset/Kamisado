@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Kamisado
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for GamePlayPage.xaml
     /// </summary>
-    public partial class MainWindow : NavigationWindow
+    public partial class GamePlayPage : Page
     {
-        public MainWindow()
+        public GamePlayPage()
         {
             InitializeComponent();
         }
