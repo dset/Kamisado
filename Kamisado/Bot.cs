@@ -32,9 +32,7 @@ namespace Kamisado
             IEnumerable<Move> possible;
             if (!currentState.PieceToMove.HasValue)
             {
-                LinkedList<Move> tmp = new LinkedList<Move>();
-                tmp.AddLast(new Move(new Point(3, 7), new Point(3, 3)));
-                possible = tmp;
+                possible = currentState.PossibleMoves.Reverse();
             }
             else
             {
@@ -42,30 +40,25 @@ namespace Kamisado
             }
 
             _imPlayerTwo = currentState.IsPlayerTwo;
-            double currentMax = -1;
+            double currentMax = Double.MinValue;
             Move bestMove = currentState.PossibleMoves.First.Value;
-
-            double alpha = -1;
-            double beta = 1;
 
             foreach (Move possibleMove in possible)
             {
-                double v = Min(new GameState(currentState, possibleMove), 1, alpha, beta);
-                Debug.WriteLine("Done with one branch. Value: " + v);
+                double v = Min(new GameState(currentState, possibleMove), 1);
+                Debug.WriteLine("Move " + possibleMove.Start + " to " + possibleMove.End + " had value " + v);
                 if (v > currentMax)
                 {
                     bestMove = possibleMove;
                     currentMax = v;
                 }
-
-                alpha = Math.Max(alpha, v);
             }
             Debug.WriteLine("Best was: " + currentMax);
             Debug.WriteLine("Visited: " + _numVisited + ", Winning: " + _numWinningEnd + ", Loosing: " + _numLoosingEnd);
             return bestMove;
         }
 
-        private double Max(GameState gs, int depth, double alpha, double beta)
+        private double Max(GameState gs, int depth)
         {
             _numVisited++;
             if (depth == _maxDepth)
@@ -81,18 +74,13 @@ namespace Kamisado
             double v = Double.MinValue;
             foreach(Move possibleMove in gs.PossibleMoves.Reverse())
             {
-                v = Math.Max(v, Min(new GameState(gs, possibleMove), depth + 1, alpha, beta));
-                if (v >= beta)
-                {
-                    return v;
-                }
-                alpha = Math.Max(alpha, v);
+                v = Math.Max(v, Min(new GameState(gs, possibleMove), depth + 1));
             }
 
             return v;
         }
 
-        private double Min(GameState gs, int depth, double alpha, double beta)
+        private double Min(GameState gs, int depth)
         {
             _numVisited++;
             if (depth == _maxDepth)
@@ -108,12 +96,7 @@ namespace Kamisado
             double v = Double.MaxValue;
             foreach (Move possibleMove in gs.PossibleMoves.Reverse())
             {
-                v = Math.Min(v, Max(new GameState(gs, possibleMove), depth + 1, alpha, beta));
-                if (v <= alpha)
-                {
-                    return v;
-                }
-                beta = Math.Min(beta, v);
+                v = Math.Min(v, Max(new GameState(gs, possibleMove), depth + 1));
             }
 
             return v;
@@ -126,12 +109,12 @@ namespace Kamisado
             if (gs.PlayerTwoWinning.HasValue && ((gs.PlayerTwoWinning.Value && _imPlayerTwo) || (!gs.PlayerTwoWinning.Value && !_imPlayerTwo)))
             {
                 _numWinningEnd++;
-                return 1;
+                return Double.MaxValue;
             }
             else if(gs.PlayerTwoWinning.HasValue)
             {
                 _numLoosingEnd++;
-                return -1;
+                return Double.MinValue;
             }
 
             return _evaluate(gs, _imPlayerTwo);

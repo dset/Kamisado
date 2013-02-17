@@ -19,11 +19,10 @@ namespace Kamisado
         {
             Func<GameState, bool, double> evaluator = (currentState, imPlayerTwo) =>
                 {
-                    return 0;
-                    //return 1.3 * PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
+                    return 1.3 * PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
                 };
 
-            IPlayer player1 = new Bot(10, evaluator);
+            IPlayer player1 = new Bot(5, evaluator);
             IPlayer player2 = new Human();
 
             GameEngine engine = new GameEngine(player1, player2);
