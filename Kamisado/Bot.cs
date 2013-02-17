@@ -14,106 +14,104 @@ namespace Kamisado
         private int _maxDepth;
         private bool _imPlayerTwo;
 
-        private double _numVisited;
-        private double _numWinningEnd;
-        private double _numLoosingEnd;
-
         public Bot(int maxDepth, Func<GameState, bool, double> evaluate)
         {
             _maxDepth = maxDepth;
             _evaluate = evaluate;
-            _numVisited = 0;
-            _numWinningEnd = 0;
-            _numLoosingEnd = 0;
         }
 
         public Move GetMove(GameState currentState)
         {
-            IEnumerable<Move> possible;
-            if (!currentState.PieceToMove.HasValue)
-            {
-                possible = currentState.PossibleMoves.Reverse();
-            }
-            else
-            {
-                possible = currentState.PossibleMoves.Reverse();
-            }
-
             _imPlayerTwo = currentState.IsPlayerTwo;
-            double currentMax = Double.MinValue;
-            Move bestMove = currentState.PossibleMoves.First.Value;
 
-            foreach (Move possibleMove in possible)
+            Move[] moves = new Move[currentState.PossibleMoves.Count];
+            currentState.PossibleMoves.CopyTo(moves, 0);
+
+            //moves = new Move[1];
+            //moves[0] = new Move(new Point(3, 7), new Point(3, 3));
+
+            double[] moveValues = new double[moves.Length];
+
+            for (int i = 0; i < moves.Length; i++)
             {
-                double v = Min(new GameState(currentState, possibleMove), 1);
-                Debug.WriteLine("Move " + possibleMove.Start + " to " + possibleMove.End + " had value " + v);
-                if (v > currentMax)
+                moveValues[i] = Min(new GameState(currentState, moves[i]), 1, Double.MinValue, Double.MaxValue);
+            }
+
+            Debug.WriteLine("");
+            for (int i = 0; i < moveValues.Length; i++)
+            {
+                Debug.WriteLine(moveValues[i] + " ");
+            }
+            Debug.WriteLine("");
+
+            double best = Double.MinValue;
+            Move bestMove = moves[0];
+            for (int i = 0; i < moves.Length; i++)
+            {
+                if (moveValues[i] > best)
                 {
-                    bestMove = possibleMove;
-                    currentMax = v;
+                    best = moveValues[i];
+                    bestMove = moves[i];
                 }
             }
-            Debug.WriteLine("Best was: " + currentMax);
-            Debug.WriteLine("Visited: " + _numVisited + ", Winning: " + _numWinningEnd + ", Loosing: " + _numLoosingEnd);
+
             return bestMove;
         }
 
-        private double Max(GameState gs, int depth)
+        private double Max(GameState gs, int depth, double alpha, double beta)
         {
-            _numVisited++;
-            if (depth == _maxDepth)
-            {
-                return EvaluateGameState(gs);
-            }
-
-            if (gs.PlayerTwoWinning.HasValue)
+            if (depth >= _maxDepth || gs.PlayerTwoWinning.HasValue)
             {
                 return EvaluateGameState(gs);
             }
 
             double v = Double.MinValue;
-            foreach(Move possibleMove in gs.PossibleMoves.Reverse())
+
+            foreach (Move move in gs.PossibleMoves.Reverse())
             {
-                v = Math.Max(v, Min(new GameState(gs, possibleMove), depth + 1));
+                v = Math.Max(v, Min(new GameState(gs, move), depth + 1, alpha, beta));
+                if (v >= beta)
+                {
+                    return v;
+                }
+
+                alpha = Math.Max(alpha, v);
             }
 
             return v;
         }
 
-        private double Min(GameState gs, int depth)
+        private double Min(GameState gs, int depth, double alpha, double beta)
         {
-            _numVisited++;
-            if (depth == _maxDepth)
-            {
-                return EvaluateGameState(gs);
-            }
-
-            if (gs.PlayerTwoWinning.HasValue)
+            if (depth >= _maxDepth || gs.PlayerTwoWinning.HasValue)
             {
                 return EvaluateGameState(gs);
             }
 
             double v = Double.MaxValue;
-            foreach (Move possibleMove in gs.PossibleMoves.Reverse())
+
+            foreach (Move move in gs.PossibleMoves.Reverse())
             {
-                v = Math.Min(v, Max(new GameState(gs, possibleMove), depth + 1));
+                v = Math.Min(v, Max(new GameState(gs, move), depth + 1, alpha, beta));
+                if (v <= alpha)
+                {
+                    return v;
+                }
+
+                beta = Math.Min(beta, v);
             }
 
             return v;
         }
 
-        private Random rand = new Random();
-
         private double EvaluateGameState(GameState gs)
         {
             if (gs.PlayerTwoWinning.HasValue && ((gs.PlayerTwoWinning.Value && _imPlayerTwo) || (!gs.PlayerTwoWinning.Value && !_imPlayerTwo)))
             {
-                _numWinningEnd++;
                 return Double.MaxValue;
             }
-            else if(gs.PlayerTwoWinning.HasValue)
+            else if (gs.PlayerTwoWinning.HasValue)
             {
-                _numLoosingEnd++;
                 return Double.MinValue;
             }
 

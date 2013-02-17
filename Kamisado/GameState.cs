@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace Kamisado
 {
     public class GameState
     {
+        public static int numByDeadlock = 0;
 
         public bool IsPlayerTwo { get; private set; }
         public Point[][] PiecePositions { get; private set; }
@@ -45,12 +47,15 @@ namespace Kamisado
                         currentPieceIndex = (int)n.BoardPositions[n.PieceToMove.Value.Y, n.PieceToMove.Value.X].Value;
                         if(visited[Convert.ToInt32(n.IsPlayerTwo)][currentPieceIndex])
                         {
+                            GameState.numByDeadlock++;
                             return !PiecePositions[0].Contains(PieceToMove.Value);
                         }
                         else
                         {
                             visited[Convert.ToInt32(n.IsPlayerTwo)][currentPieceIndex] = true;
                         }
+
+                        n = new GameState(n, n.PossibleMoves.First.Value);
                     }
                 }
 

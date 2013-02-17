@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Kamisado
 {
@@ -31,6 +32,7 @@ namespace Kamisado
             while (true)
             {
                 CurrentState = new GameState(CurrentState, ActivePlayer.GetMove(CurrentState));
+                Debug.WriteLine("Num by deadlock: " + GameState.numByDeadlock);
                 NotifyStateChanged();
                 if (CurrentState.PlayerTwoWinning.HasValue)
                 {
