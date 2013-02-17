@@ -13,51 +13,55 @@ namespace Kamisado
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public GameState CurrentState { get; private set; }
         public RelayCommand SelectTileCommand { get; private set; }
-
-        private Point? _selectedPiece;
-        private Bot _player2;
-
-        public GamePlayViewModel(GameState startState, Bot player2)
+        public GameState CurrentState
         {
-            CurrentState = startState;
-            _player2 = player2;
+            get
+            {
+                return _engine.CurrentState;
+            }
+
+            private set
+            {
+                
+            }
+        }
+
+        private GameEngine _engine;
+        private Point? _selectedPiece;
+
+        public GamePlayViewModel(GameEngine engine)
+        {
+            _engine = engine;
             _selectedPiece = null;
             SelectTileCommand = new RelayCommand(param =>
             {
-                if (!_selectedPiece.HasValue && !CurrentState.IsPlayerTwo)
+                if (engine.ActivePlayer is Human && !_selectedPiece.HasValue)
                 {
-                    Point chosen = ParamToPoint(param);
-                    if (CurrentState.PiecePositions[Convert.ToInt32(CurrentState.IsPlayerTwo)].Contains(chosen))
+                    Point chosenPoint = ParamToPoint(param);
+                    if ((!engine.CurrentState.PieceToMove.HasValue && engine.CurrentState.PiecePositions[Convert.ToInt32(engine.CurrentState.IsPlayerTwo)].Contains(chosenPoint))
+                        || (engine.CurrentState.PieceToMove.HasValue && chosenPoint.Equals(engine.CurrentState.PieceToMove.Value)))
                     {
-                        _selectedPiece = chosen;
+                        _selectedPiece = chosenPoint;
                     }
                 }
-                else if(!CurrentState.IsPlayerTwo)
+                else if (engine.ActivePlayer is Human)
                 {
-                    Move move = new Move(_selectedPiece.Value, ParamToPoint(param));
+                    (engine.ActivePlayer as Human).ChosenMove = new Move(_selectedPiece.Value, ParamToPoint(param));
+                    (engine.ActivePlayer as Human).GotMove = true;
                     _selectedPiece = null;
-                    if (CurrentState.PossibleMoves.Contains(move))
-                    {
-                        CurrentState = new GameState(CurrentState, move);
-                        NotifyPropertyChanged("CurrentState");
-                        if (CurrentState.PlayerTwoWinning.HasValue)
-                        {
-                            MessageBox.Show("Player two won: " + CurrentState.PlayerTwoWinning.Value);
-                        }
-                        else
-                        {
-                            CurrentState = new GameState(CurrentState, _player2.GetMove(CurrentState));
-                            NotifyPropertyChanged("CurrentState");
-                            if (CurrentState.PlayerTwoWinning.HasValue)
-                            {
-                                MessageBox.Show("Player two won: " + CurrentState.PlayerTwoWinning.Value);
-                            }
-                        }
-                    }
                 }
             }, param => { return true; });
+        }
+
+        public void OnGameStateChanged(object sender, EventArgs e)
+        {
+            NotifyPropertyChanged("CurrentState");
+        }
+
+        public void OnGameOver(object sender, GameOverEventArgs e)
+        {
+            MessageBox.Show("Player two won: " + e.PlayerTwoWon);
         }
 
         private void NotifyPropertyChanged(String propertyName)
