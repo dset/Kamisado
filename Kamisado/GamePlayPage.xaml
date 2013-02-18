@@ -102,8 +102,8 @@
         <Button Grid.Row="7" Grid.Column="7" Command="{Binding Path=SelectTileCommand}" CommandParameter="7 7" Background="Orange" />
         
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][0].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][0].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][0].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][0].Position.X}"
             Fill="Brown"
             Stretch="Fill"
             StrokeThickness="5"
@@ -112,8 +112,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][1].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][1].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][1].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][1].Position.X}"
             Fill="Green"
             Stretch="Fill"
             StrokeThickness="5"
@@ -122,8 +122,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][2].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][2].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][2].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][2].Position.X}"
             Fill="Red"
             Stretch="Fill"
             StrokeThickness="5"
@@ -132,8 +132,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][3].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][3].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][3].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][3].Position.X}"
             Fill="Yellow"
             Stretch="Fill"
             StrokeThickness="5"
@@ -142,8 +142,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][4].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][4].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][4].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][4].Position.X}"
             Fill="Pink"
             Stretch="Fill"
             StrokeThickness="5"
@@ -152,8 +152,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][5].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][5].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][5].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][5].Position.X}"
             Fill="Purple"
             Stretch="Fill"
             StrokeThickness="5"
@@ -162,8 +162,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][6].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][6].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][6].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][6].Position.X}"
             Fill="Blue"
             Stretch="Fill"
             StrokeThickness="5"
@@ -172,8 +172,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][7].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][7].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][7].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][7].Position.X}"
             Fill="Orange"
             Stretch="Fill"
             StrokeThickness="5"
@@ -182,8 +182,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][0].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][0].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][0].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][0].Position.X}"
             Fill="Brown"
             Stretch="Fill"
             StrokeThickness="5"
@@ -192,8 +192,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][1].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][1].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][1].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][1].Position.X}"
             Fill="Green"
             Stretch="Fill"
             StrokeThickness="5"
@@ -202,8 +202,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][2].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][2].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][2].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][2].Position.X}"
             Fill="Red"
             Stretch="Fill"
             StrokeThickness="5"
@@ -212,8 +212,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][3].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][3].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][3].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][3].Position.X}"
             Fill="Yellow"
             Stretch="Fill"
             StrokeThickness="5"
@@ -222,8 +222,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][4].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][4].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][4].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][4].Position.X}"
             Fill="Pink"
             Stretch="Fill"
             StrokeThickness="5"
@@ -232,8 +232,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][5].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][5].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][5].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][5].Position.X}"
             Fill="Purple"
             Stretch="Fill"
             StrokeThickness="5"
@@ -242,8 +242,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][6].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][6].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][6].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][6].Position.X}"
             Fill="Blue"
             Stretch="Fill"
             StrokeThickness="5"
@@ -252,8 +252,8 @@
             IsHitTestVisible="False"/>
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][7].Y}"
-            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][7].X}"
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][7].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][7].Position.X}"
             Fill="Orange"
             Stretch="Fill"
             StrokeThickness="5"
@@ -263,8 +263,8 @@
 
 
         <Ellipse
-            Grid.Row="{Binding Path=CurrentState.PieceToMove.Y}"
-            Grid.Column="{Binding Path=CurrentState.PieceToMove.X}"
+            Grid.Row="{Binding Path=CurrentState.PieceToMove.Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PieceToMove.Position.X}"
             Fill="Aqua"
             Stretch="Fill"
             StrokeThickness="0"

@@ -39,17 +39,21 @@ namespace Kamisado
                 if (engine.ActivePlayer is Human && !_selectedPiece.HasValue)
                 {
                     Point chosenPoint = ParamToPoint(param);
-                    if ((!engine.CurrentState.PieceToMove.HasValue && engine.CurrentState.PiecePositions[Convert.ToInt32(engine.CurrentState.IsPlayerTwo)].Contains(chosenPoint))
-                        || (engine.CurrentState.PieceToMove.HasValue && chosenPoint.Equals(engine.CurrentState.PieceToMove.Value)))
+                    if ((engine.CurrentState.PieceToMove == null && chosenPoint.Y == 7)
+                        || (engine.CurrentState.PieceToMove != null && chosenPoint.Equals(engine.CurrentState.PieceToMove.Position)))
                     {
                         _selectedPiece = chosenPoint;
                     }
                 }
                 else if (engine.ActivePlayer is Human)
                 {
-                    (engine.ActivePlayer as Human).ChosenMove = new Move(_selectedPiece.Value, ParamToPoint(param));
-                    (engine.ActivePlayer as Human).GotMove = true;
-                    _selectedPiece = null;
+                    Move move = new Move(_selectedPiece.Value, ParamToPoint(param));
+                    if (engine.CurrentState.PossibleMoves.Contains(move))
+                    {
+                        (engine.ActivePlayer as Human).ChosenMove = move;
+                        (engine.ActivePlayer as Human).GotMove = true;
+                        _selectedPiece = null;
+                    }
                 }
             }, param => { return true; });
         }

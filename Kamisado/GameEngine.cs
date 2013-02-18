@@ -31,7 +31,7 @@ namespace Kamisado
         {
             while (true)
             {
-                CurrentState = new GameState(CurrentState, ActivePlayer.GetMove(CurrentState));
+                CurrentState.Move(ActivePlayer.GetMove(CurrentState));
                 Debug.WriteLine("Num by deadlock: " + GameState.numByDeadlock);
                 NotifyStateChanged();
                 if (CurrentState.PlayerTwoWinning.HasValue)

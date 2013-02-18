@@ -19,12 +19,12 @@ namespace Kamisado
         {
             Func<GameState, bool, double> evaluator = (currentState, imPlayerTwo) =>
                 {
-                    return 1.3 * PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
-                    //return 0;
+                    //return 1.3 * PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
+                    return 0;
                 };
 
             IPlayer player1 = new Human();
-            IPlayer player2 = new Bot(4, evaluator);
+            IPlayer player2 = new Bot(10, evaluator);
 
             GameEngine engine = new GameEngine(player1, player2);
             GamePlayViewModel gpvm = new GamePlayViewModel(engine);
@@ -46,7 +46,7 @@ namespace Kamisado
             window.Show();
         }
 
-        private double PiecesInStriking(GameState currentState, bool imPlayerTwo)
+        /*private double PiecesInStriking(GameState currentState, bool imPlayerTwo)
         {
             int numStriking = 0;
             foreach (System.Drawing.Point myPiece in currentState.PiecePositions[Convert.ToInt32(imPlayerTwo)])
@@ -77,6 +77,6 @@ namespace Kamisado
             }
 
             return ((double)numStriking) / 8.0;
-        }
+        }*/
     }
 }

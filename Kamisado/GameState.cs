@@ -13,9 +13,9 @@ namespace Kamisado
         public static int numByDeadlock = 0;
 
         public bool IsPlayerTwo { get; private set; }
-        public Point[][] PiecePositions { get; private set; }
-        public PieceColor?[,] BoardPositions { get; private set; }
-        public Point? PieceToMove { get; private set; }
+        public Piece[][] PiecePositions { get; private set; }
+        public Piece[][] BoardPositions { get; private set; }
+        public Piece PieceToMove { get; private set; }
 
         public bool? PlayerTwoWinning
         {
@@ -23,11 +23,11 @@ namespace Kamisado
             {
                 for (int i = 0; i < PiecePositions[0].Length; i++)
                 {
-                    if (PiecePositions[0][i].Y == 0)
+                    if (PiecePositions[0][i].Position.Y == 0)
                     {
                         return false;
                     }
-                    else if (PiecePositions[1][i].Y == 7)
+                    else if (PiecePositions[1][i].Position.Y == 7)
                     {
                         return true;
                     }
@@ -37,25 +37,44 @@ namespace Kamisado
                 visited[0] = new bool[8];
                 visited[1] = new bool[8];
 
-                if (PossibleMoves.Count == 1 && PieceToMove.Value.Equals(PossibleMoves.First.Value.End))
+                if (PossibleMoves.Count == 1 && PieceToMove.Position.Equals(PossibleMoves[0].End))
                 {
-                    int currentPieceIndex = (int)BoardPositions[PieceToMove.Value.Y, PieceToMove.Value.X].Value;
+                    LinkedList<Move> madeMoves = new LinkedList<Move>();
+
+                    int currentPieceIndex = (int)PieceToMove.Color;
                     visited[Convert.ToInt32(IsPlayerTwo)][currentPieceIndex] = true;
-                    GameState n = new GameState(this, new Move(PieceToMove.Value, PieceToMove.Value));
-                    while (n.PossibleMoves.Count == 1 && n.PieceToMove.Value.Equals(n.PossibleMoves.First.Value.End))
+
+                    Move m = new Move(PieceToMove.Position, PieceToMove.Position);
+                    madeMoves.AddLast(m);
+                    Move(m);
+                    while (PossibleMoves.Count == 1 && PieceToMove.Position.Equals(PossibleMoves[0].End))
                     {
-                        currentPieceIndex = (int)n.BoardPositions[n.PieceToMove.Value.Y, n.PieceToMove.Value.X].Value;
-                        if(visited[Convert.ToInt32(n.IsPlayerTwo)][currentPieceIndex])
+                        currentPieceIndex = (int)PieceToMove.Color;
+                        if(visited[Convert.ToInt32(IsPlayerTwo)][currentPieceIndex])
                         {
                             GameState.numByDeadlock++;
-                            return !PiecePositions[0].Contains(PieceToMove.Value);
+
+                            while (madeMoves.Count > 0)
+                            {
+                                ReverseMove(madeMoves.Last.Value);
+                                madeMoves.RemoveLast();
+                            }
+
+                            return PieceToMove.BelongsToPlayerTwo;
                         }
                         else
                         {
-                            visited[Convert.ToInt32(n.IsPlayerTwo)][currentPieceIndex] = true;
+                            visited[Convert.ToInt32(IsPlayerTwo)][currentPieceIndex] = true;
                         }
 
-                        n = new GameState(n, n.PossibleMoves.First.Value);
+                        madeMoves.AddLast(PossibleMoves[0]);
+                        Move(PossibleMoves[0]);
+                    }
+
+                    while (madeMoves.Count > 0)
+                    {
+                        ReverseMove(madeMoves.Last.Value);
+                        madeMoves.RemoveLast();
                     }
                 }
 
@@ -68,8 +87,8 @@ namespace Kamisado
             }
         }
 
-        private LinkedList<Move> _possibleMoves;
-        public LinkedList<Move> PossibleMoves
+        private List<Move> _possibleMoves;
+        public List<Move> PossibleMoves
         {
             get
             {
@@ -77,126 +96,32 @@ namespace Kamisado
                 {
                     _possibleMoves = GenerateNextMoves();
                 }
-                if (_possibleMoves.Count == 0)
-                {
-                    _possibleMoves.AddLast(new Move(PieceToMove.Value, PieceToMove.Value));
-                }
 
                 return _possibleMoves;
             }
 
             private set
             {
-                _possibleMoves = value;
+                
             }
         }
 
-        protected LinkedList<Move> GenerateNextMoves()
+        protected List<Move> GenerateNextMoves()
         {
             if (PieceToMove == null)
             {
-                LinkedList<Move> moves = new LinkedList<Move>();
+                List<Move> res = new List<Move>();
                 for (int i = 0; i < PiecePositions[0].Length; i++)
                 {
-                    Point p = PiecePositions[0][i];
-                    LinkedList<Move> tmp = GenerateNextMovesPlayerOne(p);
-                    foreach (var move in tmp)
-                    {
-                        moves.AddLast(move);
-                    }
+                    res.AddRange(PiecePositions[0][i].GetPossibleMoves(this));
                 }
 
-                return moves;
+                return res;
             }
             else
             {
-                if (IsPlayerTwo)
-                {
-                    return GenerateNextMovesPlayerTwo(PieceToMove.Value);
-                }
-                else
-                {
-                    return GenerateNextMovesPlayerOne(PieceToMove.Value);
-                }
+                return PieceToMove.GetPossibleMoves(this);
             }
-        }
-
-        public LinkedList<Move> GenerateNextMovesPlayerOne(Point piece)
-        {
-            LinkedList<Move> moves = new LinkedList<Move>();
-
-            int col = piece.X - 1;
-            int row = piece.Y - 1;
-
-            while (col >= 0 && row >= 0 && !BoardPositions[row, col].HasValue)
-            {
-                Move move = new Move(piece, new Point(col, row));
-                moves.AddLast(move);
-                col--;
-                row--;
-            }
-
-            col = piece.X;
-            row = piece.Y - 1;
-
-            while (row >= 0 && !BoardPositions[row, col].HasValue)
-            {
-                Move move = new Move(piece, new Point(col, row));
-                moves.AddLast(move);
-                row--;
-            }
-
-            col = piece.X + 1;
-            row = piece.Y - 1;
-
-            while (col < 8 && row >= 0 && !BoardPositions[row, col].HasValue)
-            {
-                Move move = new Move(piece, new Point(col, row));
-                moves.AddLast(move);
-                col++;
-                row--;
-            }
-
-            return moves;
-        }
-
-        public LinkedList<Move> GenerateNextMovesPlayerTwo(Point piece)
-        {
-            LinkedList<Move> moves = new LinkedList<Move>();
-
-            int col = piece.X - 1;
-            int row = piece.Y + 1;
-
-            while (col >= 0 && row < 8 && !BoardPositions[row, col].HasValue)
-            {
-                Move move = new Move(piece, new Point(col, row));
-                moves.AddLast(move);
-                col--;
-                row++;
-            }
-
-            col = piece.X;
-            row = piece.Y + 1;
-
-            while (row < 8 && !BoardPositions[row, col].HasValue)
-            {
-                Move move = new Move(piece, new Point(col, row));
-                moves.AddLast(move);
-                row++;
-            }
-
-            col = piece.X + 1;
-            row = piece.Y + 1;
-
-            while (col < 8 && row < 8 && !BoardPositions[row, col].HasValue)
-            {
-                Move move = new Move(piece, new Point(col, row));
-                moves.AddLast(move);
-                col++;
-                row++;
-            }
-
-            return moves;
         }
 
         public GameState()
@@ -204,51 +129,95 @@ namespace Kamisado
             IsPlayerTwo = false;
 
             PieceToMove = null;
-            
-            PiecePositions = new Point[2][];
-            PiecePositions[0] = new Point[8];
-            PiecePositions[1] = new Point[8];
-            for (int i = 0; i < 8; i++)
-            {
-                PiecePositions[0][i] = new Point(i, 7);
-                PiecePositions[1][7 - i] = new Point(i, 0);
-            }
 
-            BoardPositions = new PieceColor?[8, 8];
+            BoardPositions = new Piece[8][];
             for (int i = 0; i < 8; i++)
             {
+                BoardPositions[i] = new Piece[8];
                 for (int j = 0; j < 8; j++)
                 {
-                    BoardPositions[i, j] = null;
+                    BoardPositions[i][j] = null;
                 }
             }
             
-            //Player one starting positions
-            BoardPositions[7, 0] = PieceColor.Brown;
-            BoardPositions[7, 1] = PieceColor.Green;
-            BoardPositions[7, 2] = PieceColor.Red;
-            BoardPositions[7, 3] = PieceColor.Yellow;
-            BoardPositions[7, 4] = PieceColor.Pink;
-            BoardPositions[7, 5] = PieceColor.Purple;
-            BoardPositions[7, 6] = PieceColor.Blue;
-            BoardPositions[7, 7] = PieceColor.Orange;
+            PiecePositions = new Piece[2][];
+            PiecePositions[0] = new Piece[8];
+            PiecePositions[1] = new Piece[8];
 
-            //Player two starting positions
-            BoardPositions[0, 0] = PieceColor.Orange;
-            BoardPositions[0, 1] = PieceColor.Blue;
-            BoardPositions[0, 2] = PieceColor.Purple;
-            BoardPositions[0, 3] = PieceColor.Pink;
-            BoardPositions[0, 4] = PieceColor.Yellow;
-            BoardPositions[0, 5] = PieceColor.Red;
-            BoardPositions[0, 6] = PieceColor.Green;
-            BoardPositions[0, 7] = PieceColor.Brown;
+            for (int i = 0; i < 8; i++)
+            {
+                PiecePositions[0][i] = new Piece(false, new Point(i, 7), (PieceColor)i);
+                BoardPositions[7][i] = PiecePositions[0][i];
+
+                PiecePositions[1][i] = new Piece(true, new Point(7 - i, 0), (PieceColor)i);
+                BoardPositions[0][7 - i] = PiecePositions[1][i];
+
+            }
         }
 
-        public GameState(GameState oldState, Move move)
+        public GameState Move(Move move)
+        {
+            if (PieceToMove == null)
+            {
+                PieceToMove = BoardPositions[move.Start.Y][move.Start.X];
+            }
+
+            IsPlayerTwo = !IsPlayerTwo;
+
+            if (BoardPositions[move.End.Y][move.End.X] == null)
+            {
+                BoardPositions[move.Start.Y][move.Start.X] = null;
+                BoardPositions[move.End.Y][move.End.X] = PieceToMove;
+                PieceToMove.Position = move.End;
+
+                PieceToMove = PiecePositions[Convert.ToInt32(IsPlayerTwo)][(int)Board.Tile[move.End.Y, move.End.X]];
+
+                _possibleMoves = null;
+            }
+            else
+            {
+                Piece next = BoardPositions[move.Start.Y][move.Start.X];
+                BoardPositions[move.Start.Y][move.Start.X] = null;
+                int ystep = move.End.Y - move.Start.Y;
+
+                while (BoardPositions[next.Position.Y + ystep][next.Position.X] != null)
+                {
+                    Piece tmp = BoardPositions[next.Position.Y + ystep][next.Position.X];
+                    next.Position = new Point(next.Position.X, next.Position.Y + ystep);
+                    BoardPositions[next.Position.Y + ystep][next.Position.X] = next;
+                    next = tmp;
+                }
+
+                next.Position = new Point(next.Position.X, next.Position.Y + ystep);
+                BoardPositions[next.Position.Y][next.Position.X] = next;
+
+                PieceToMove = next;
+                _possibleMoves = new List<Move>();
+                _possibleMoves.Add(new Move(next.Position, next.Position));
+            }
+
+            return this;
+        }
+
+        public GameState ReverseMove(Move move)
+        {
+            IsPlayerTwo = !IsPlayerTwo;
+
+            PieceToMove = BoardPositions[move.End.Y][move.End.X];
+            BoardPositions[move.End.Y][move.End.X] = null;
+            BoardPositions[move.Start.Y][move.Start.X] = PieceToMove;
+            PieceToMove.Position = move.Start;
+
+            _possibleMoves = null;
+
+            return this;
+        }
+
+        /*public GameState(GameState oldState, Move move)
         {
             IsPlayerTwo = !oldState.IsPlayerTwo;
 
-            BoardPositions = new PieceColor?[8, 8];
+            BoardPositions = new Piece[8][];
             Array.Copy(oldState.BoardPositions, BoardPositions, 64);
 
             PieceColor? c = BoardPositions[move.Start.Y, move.Start.X];
@@ -264,9 +233,9 @@ namespace Kamisado
 
             PieceColor endTileColor = Board.Tile[move.End.Y, move.End.X];
             PieceToMove = PiecePositions[Convert.ToInt32(IsPlayerTwo)][(int)endTileColor];
-        }
+        }*/
 
-        public GameState(Point[][] piecePositions, Point pieceToMove, bool isPlayerTwo)
+        /*public GameState(Point[][] piecePositions, Point pieceToMove, bool isPlayerTwo)
         {
             PiecePositions = piecePositions;
             PieceToMove = pieceToMove;
@@ -290,6 +259,6 @@ namespace Kamisado
                 BoardPositions[p1Piece.Y, p1Piece.X] = color;
                 BoardPositions[p2Piece.Y, p2Piece.X] = color;
             }
-        }
+        }*/
     }
 }

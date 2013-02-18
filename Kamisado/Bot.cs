@@ -27,14 +27,13 @@ namespace Kamisado
             Move[] moves = new Move[currentState.PossibleMoves.Count];
             currentState.PossibleMoves.CopyTo(moves, 0);
 
-            //moves = new Move[1];
-            //moves[0] = new Move(new Point(3, 7), new Point(3, 3));
-
             double[] moveValues = new double[moves.Length];
 
             for (int i = 0; i < moves.Length; i++)
             {
-                moveValues[i] = Min(new GameState(currentState, moves[i]), 1, Double.MinValue, Double.MaxValue);
+                currentState.Move(moves[i]);
+                moveValues[i] = Min(currentState, 1, Double.MinValue, Double.MaxValue);
+                currentState.ReverseMove(moves[i]);
             }
 
             Debug.WriteLine("");
@@ -67,9 +66,11 @@ namespace Kamisado
 
             double v = Double.MinValue;
 
-            foreach (Move move in gs.PossibleMoves.Reverse())
+            foreach (Move move in gs.PossibleMoves.Reverse<Move>())
             {
-                v = Math.Max(v, Min(new GameState(gs, move), depth + 1, alpha, beta));
+                gs.Move(move);
+                v = Math.Max(v, Min(gs, depth + 1, alpha, beta));
+                gs.ReverseMove(move);
                 if (v >= beta)
                 {
                     return v;
@@ -90,9 +91,11 @@ namespace Kamisado
 
             double v = Double.MaxValue;
 
-            foreach (Move move in gs.PossibleMoves.Reverse())
+            foreach (Move move in gs.PossibleMoves.Reverse<Move>())
             {
-                v = Math.Min(v, Max(new GameState(gs, move), depth + 1, alpha, beta));
+                gs.Move(move);
+                v = Math.Min(v, Max(gs, depth + 1, alpha, beta));
+                gs.ReverseMove(move);
                 if (v <= alpha)
                 {
                     return v;

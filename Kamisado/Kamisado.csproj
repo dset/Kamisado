@@ -60,7 +60,9 @@
     <Compile Include="GameOverEventArgs.cs" />
     <Compile Include="Human.cs" />
     <Compile Include="IPlayer.cs" />
+    <Compile Include="Piece.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="Sumo.cs" />
     <Page Include="GamePlayPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
