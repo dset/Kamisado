@@ -20,15 +20,10 @@ namespace Kamisado
             {
                 return _engine.CurrentState;
             }
-
-            private set
-            {
-                
-            }
         }
 
         private GameEngine _engine;
-        private Point? _selectedPiece;
+        private Piece _selectedPiece;
 
         public GamePlayViewModel(GameEngine engine)
         {
@@ -36,21 +31,31 @@ namespace Kamisado
             _selectedPiece = null;
             SelectTileCommand = new RelayCommand(param =>
             {
-                if (engine.ActivePlayer is Human && !_selectedPiece.HasValue)
+                if (engine.ActivePlayer is Human && _selectedPiece == null)
                 {
                     Point chosenPoint = ParamToPoint(param);
                     if ((engine.CurrentState.PieceToMove == null && chosenPoint.Y == 7)
                         || (engine.CurrentState.PieceToMove != null && chosenPoint.Equals(engine.CurrentState.PieceToMove.Position)))
                     {
-                        _selectedPiece = chosenPoint;
+                        _selectedPiece = _engine.CurrentState.BoardPositions[chosenPoint.Y][chosenPoint.X];
                     }
                 }
                 else if (engine.ActivePlayer is Human)
                 {
-                    Move move = new Move(_selectedPiece.Value, ParamToPoint(param));
-                    if (engine.CurrentState.PossibleMoves.Contains(move))
+                    Point chosenPoint = ParamToPoint(param);
+                    IMove chosenMove = null;
+                    foreach (IMove move in CurrentState.PossibleMoves)
                     {
-                        (engine.ActivePlayer as Human).ChosenMove = move;
+                        if(move.Piece == _selectedPiece && move.End.Equals(chosenPoint))
+                        {
+                            chosenMove = move;
+                            break;
+                        }
+                    }
+
+                    if(chosenMove != null)
+                    {
+                        (engine.ActivePlayer as Human).ChosenMove = chosenMove;
                         (engine.ActivePlayer as Human).GotMove = true;
                         _selectedPiece = null;
                     }

@@ -31,15 +31,15 @@ namespace Kamisado
         {
             while (true)
             {
-                CurrentState.Move(ActivePlayer.GetMove(CurrentState));
-                Debug.WriteLine("Num by deadlock: " + GameState.numByDeadlock);
+                IMove move = ActivePlayer.GetMove(CurrentState);
+                move.Execute();
                 NotifyStateChanged();
+
                 if (CurrentState.PlayerTwoWinning.HasValue)
                 {
                     NotifyGameOver(CurrentState.PlayerTwoWinning.Value);
                     return;
                 }
-
 
                 ActivePlayer = ActivePlayer == Player1 ? Player2 : Player1;
             }

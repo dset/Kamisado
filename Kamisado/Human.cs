@@ -9,14 +9,14 @@ namespace Kamisado
     class Human : IPlayer
     {
         public volatile bool GotMove;
-        public Move ChosenMove;
+        public IMove ChosenMove;
 
         public Human()
         {
             GotMove = false;
         }
 
-        public Move GetMove(GameState currentState)
+        public IMove GetMove(GameState currentState)
         {
             while (!GotMove) ;
             GotMove = false;

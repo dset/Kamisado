@@ -24,7 +24,7 @@ namespace Kamisado
                 };
 
             IPlayer player1 = new Human();
-            IPlayer player2 = new Bot(10, evaluator);
+            IPlayer player2 = new Human();
 
             GameEngine engine = new GameEngine(player1, player2);
             GamePlayViewModel gpvm = new GamePlayViewModel(engine);

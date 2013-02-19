@@ -15,7 +15,7 @@ namespace Kamisado
             MaxMoveLength = 5;
         }
 
-        protected override List<Move> GenerateStraightMoves(GameState state, int maxLength, int ystep)
+        protected override List<IMove> GenerateStraightMoves(GameState state, int maxLength, int ystep)
         {
             int forwardY = Position.Y + ystep;
             if (0 <= forwardY && forwardY < 8 && state.BoardPositions[forwardY][Position.X] == null)
@@ -28,13 +28,13 @@ namespace Kamisado
                 if (0 <= forwardForwardY && forwardForwardY < 8 && state.BoardPositions[forwardForwardY][Position.X] == null &&
                     !(state.BoardPositions[forwardY][Position.X] is Sumo) && BelongsToPlayerTwo != state.BoardPositions[forwardY][Position.X].BelongsToPlayerTwo)
                 {
-                    List<Move> res = new List<Move>();
-                    res.Add(new Move(new Point(Position.X, Position.Y), new Point(Position.X, forwardY)));
+                    List<IMove> res = new List<IMove>();
+                    res.Add(new SumoPushMove(state, this, new Point(Position.X, forwardY)));
                     return res;
                 }
                 else
                 {
-                    return new List<Move>();
+                    return new List<IMove>();
                 }
             }
         }

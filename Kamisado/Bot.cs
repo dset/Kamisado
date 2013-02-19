@@ -20,7 +20,7 @@ namespace Kamisado
             _evaluate = evaluate;
         }
 
-        public Move GetMove(GameState currentState)
+        public IMove GetMove(GameState currentState)
         {
             _imPlayerTwo = currentState.IsPlayerTwo;
 
@@ -31,9 +31,9 @@ namespace Kamisado
 
             for (int i = 0; i < moves.Length; i++)
             {
-                currentState.Move(moves[i]);
+                moves[i].Execute();
                 moveValues[i] = Min(currentState, 1, Double.MinValue, Double.MaxValue);
-                currentState.ReverseMove(moves[i]);
+                moves[i].Reverse();
             }
 
             Debug.WriteLine("");
@@ -66,11 +66,12 @@ namespace Kamisado
 
             double v = Double.MinValue;
 
-            foreach (Move move in gs.PossibleMoves.Reverse<Move>())
+            IEnumerable<IMove> possibleMoves = gs.PossibleMoves.Reverse<IMove>();
+            foreach (Move move in possibleMoves)
             {
-                gs.Move(move);
+                move.Execute();
                 v = Math.Max(v, Min(gs, depth + 1, alpha, beta));
-                gs.ReverseMove(move);
+                move.Reverse();
                 if (v >= beta)
                 {
                     return v;
@@ -91,11 +92,12 @@ namespace Kamisado
 
             double v = Double.MaxValue;
 
-            foreach (Move move in gs.PossibleMoves.Reverse<Move>())
+            IEnumerable<IMove> possibleMoves = gs.PossibleMoves.Reverse<IMove>();
+            foreach (Move move in possibleMoves)
             {
-                gs.Move(move);
+                move.Execute();
                 v = Math.Min(v, Max(gs, depth + 1, alpha, beta));
-                gs.ReverseMove(move);
+                move.Reverse();
                 if (v <= alpha)
                 {
                     return v;

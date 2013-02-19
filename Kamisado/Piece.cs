@@ -22,9 +22,9 @@ namespace Kamisado
             MaxMoveLength = 7;
         }
 
-        public List<Move> GetPossibleMoves(GameState state)
+        public List<IMove> GetPossibleMoves(GameState state)
         {
-            List<Move> res = new List<Move>();
+            List<IMove> res = new List<IMove>();
 
             int ystep = -1;
             if (BelongsToPlayerTwo)
@@ -38,20 +38,20 @@ namespace Kamisado
 
             if (res.Count == 0)
             {
-                res.Add(new Move(Position, Position));
+                res.Add(new Move(state, this, Position));
             }
 
             return res;
         }
 
-        protected virtual List<Move> GenerateStraightMoves(GameState state, int maxLength, int ystep)
+        protected virtual List<IMove> GenerateStraightMoves(GameState state, int maxLength, int ystep)
         {
             return GenerateMovesOnLine(state, MaxMoveLength, 0, ystep);
         }
 
-        protected List<Move> GenerateMovesOnLine(GameState state, int maxLength, int xstep, int ystep)
+        protected List<IMove> GenerateMovesOnLine(GameState state, int maxLength, int xstep, int ystep)
         {
-            List<Move> res = new List<Move>();
+            List<IMove> res = new List<IMove>();
 
             int col = Position.X + xstep;
             int row = Position.Y + ystep;
@@ -62,7 +62,7 @@ namespace Kamisado
                 0 <= row && row < 8 &&
                 state.BoardPositions[row][col] == null)
             {
-                Move move = new Move(Position, new Point(col, row));
+                Move move = new Move(state, this, new Point(col, row));
                 res.Add(move);
                 col += xstep;
                 row += ystep;

@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace Kamisado
 {
-    public class Move : IMove
+    class SumoPushMove : IMove
     {
         private GameState _state;
         private Piece _piece;
@@ -20,7 +20,7 @@ namespace Kamisado
         {
             get
             {
-                return _piece.Position.Equals(_end);
+                return false;
             }
         }
 
@@ -40,7 +40,7 @@ namespace Kamisado
             }
         }
 
-        public Move(GameState state, Piece piece, Point end)
+        public SumoPushMove(GameState state, Piece piece, Point end)
         {
             _state = state;
             _piece = piece;
@@ -52,21 +52,36 @@ namespace Kamisado
             _oldPieceToMove = _state.PieceToMove;
             _start = _piece.Position;
 
+            int ystep = _end.Y - _start.Y;
+
+            Piece otherPiece = _state.BoardPositions[_start.Y + ystep][_start.X];
+            _state.BoardPositions[_start.Y + ystep + ystep][_start.X] = otherPiece;
+            _state.BoardPositions[_start.Y + ystep][_start.X] = _piece;
             _state.BoardPositions[_start.Y][_start.X] = null;
-            _state.BoardPositions[_end.Y][_end.X] = _piece;
+
+            otherPiece.Position = new Point(_start.X, _start.Y + ystep + ystep);
             _piece.Position = _end;
 
             _state.IsPlayerTwo = !_state.IsPlayerTwo;
-            _state.PieceToMove = _state.PiecePositions[_state.IsPlayerTwo ? 1 : 0][(int)Board.Tile[_end.Y, _end.X]];
-            _state.PossibleMoves = null;
+            _state.PieceToMove = otherPiece;
+
+            List<IMove> possible = new List<IMove>();
+            possible.Add(new Move(_state, otherPiece, otherPiece.Position));
+            _state.PossibleMoves = possible;
 
             return _state;
         }
 
         public GameState Reverse()
         {
-            _state.BoardPositions[_end.Y][_end.X] = null;
+            int ystep = _end.Y - _start.Y;
+
+            Piece otherPiece = _state.BoardPositions[_start.Y + ystep + ystep][_start.X];
+            _state.BoardPositions[_start.Y + ystep + ystep][_start.X] = null;
+            _state.BoardPositions[_start.Y + ystep][_start.X] = otherPiece;
             _state.BoardPositions[_start.Y][_start.X] = _piece;
+
+            otherPiece.Position = new Point(_start.X, _start.Y + ystep);
             _piece.Position = _start;
 
             _state.IsPlayerTwo = !_state.IsPlayerTwo;
@@ -74,23 +89,6 @@ namespace Kamisado
             _state.PossibleMoves = null;
 
             return _state;
-        }
-
-        public override bool Equals(System.Object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (this.GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            Move m = (Move)obj;
-
-            return _piece == m._piece && _end.Equals(m._end);
         }
     }
 }

@@ -59,10 +59,12 @@
     <Compile Include="GameEngine.cs" />
     <Compile Include="GameOverEventArgs.cs" />
     <Compile Include="Human.cs" />
+    <Compile Include="IMove.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="Piece.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="Sumo.cs" />
+    <Compile Include="SumoPushMove.cs" />
     <Page Include="GamePlayPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
