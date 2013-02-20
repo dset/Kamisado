@@ -24,7 +24,7 @@ namespace Kamisado
         {
             _imPlayerTwo = currentState.IsPlayerTwo;
 
-            Move[] moves = new Move[currentState.PossibleMoves.Count];
+            IMove[] moves = new IMove[currentState.PossibleMoves.Count];
             currentState.PossibleMoves.CopyTo(moves, 0);
 
             double[] moveValues = new double[moves.Length];
@@ -34,17 +34,11 @@ namespace Kamisado
                 moves[i].Execute();
                 moveValues[i] = Min(currentState, 1, Double.MinValue, Double.MaxValue);
                 moves[i].Reverse();
+                Debug.WriteLine(moves[i] + "  value " + moveValues[i] + " ");
             }
-
-            Debug.WriteLine("");
-            for (int i = 0; i < moveValues.Length; i++)
-            {
-                Debug.WriteLine(moveValues[i] + " ");
-            }
-            Debug.WriteLine("");
 
             double best = Double.MinValue;
-            Move bestMove = moves[0];
+            IMove bestMove = moves[0];
             for (int i = 0; i < moves.Length; i++)
             {
                 if (moveValues[i] > best)
@@ -67,7 +61,8 @@ namespace Kamisado
             double v = Double.MinValue;
 
             IEnumerable<IMove> possibleMoves = gs.PossibleMoves.Reverse<IMove>();
-            foreach (Move move in possibleMoves)
+
+            foreach (IMove move in possibleMoves)
             {
                 move.Execute();
                 v = Math.Max(v, Min(gs, depth + 1, alpha, beta));
@@ -93,7 +88,8 @@ namespace Kamisado
             double v = Double.MaxValue;
 
             IEnumerable<IMove> possibleMoves = gs.PossibleMoves.Reverse<IMove>();
-            foreach (Move move in possibleMoves)
+
+            foreach (IMove move in possibleMoves)
             {
                 move.Execute();
                 v = Math.Min(v, Max(gs, depth + 1, alpha, beta));

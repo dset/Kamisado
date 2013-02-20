@@ -147,15 +147,45 @@ namespace Kamisado
             for (int i = 0; i < 8; i++)
             {
                 PiecePositions[0][i] = new Piece(false, new Point(i, 7), (PieceColor)i);
-                if (i == 0)
-                {
-                    PiecePositions[0][i] = new Sumo(false, new Point(i, 7), (PieceColor)i);
-                }
                 BoardPositions[7][i] = PiecePositions[0][i];
 
                 PiecePositions[1][i] = new Piece(true, new Point(7 - i, 0), (PieceColor)i);
                 BoardPositions[0][7 - i] = PiecePositions[1][i];
 
+            }
+        }
+
+        public GameState(List<Piece> pieces, Piece pieceToMove)
+        {
+            if (pieceToMove == null)
+            {
+                IsPlayerTwo = false;
+                PieceToMove = null;
+            }
+            else
+            {
+                IsPlayerTwo = pieceToMove.BelongsToPlayerTwo;
+                PieceToMove = pieceToMove;
+            }
+
+            BoardPositions = new Piece[8][];
+            for (int i = 0; i < 8; i++)
+            {
+                BoardPositions[i] = new Piece[8];
+                for (int j = 0; j < 8; j++)
+                {
+                    BoardPositions[i][j] = null;
+                }
+            }
+
+            PiecePositions = new Piece[2][];
+            PiecePositions[0] = new Piece[8];
+            PiecePositions[1] = new Piece[8];
+
+            foreach (Piece piece in pieces)
+            {
+                BoardPositions[piece.Position.Y][piece.Position.X] = piece;
+                PiecePositions[piece.BelongsToPlayerTwo ? 1 : 0][(int)piece.Color] = piece;
             }
         }
 

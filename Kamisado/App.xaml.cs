@@ -19,14 +19,40 @@ namespace Kamisado
         {
             Func<GameState, bool, double> evaluator = (currentState, imPlayerTwo) =>
                 {
-                    //return 1.3 * PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
-                    return 0;
+                    return 1.3 * PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
+                    //return 0;
                 };
 
-            IPlayer player1 = new Human();
-            IPlayer player2 = new Human();
+            IPlayer player1 = new Bot(7, evaluator);
+            IPlayer player2 = new Bot(7, evaluator);
 
-            GameEngine engine = new GameEngine(player1, player2);
+            List<System.Drawing.Point> player1Pos = new List<System.Drawing.Point>();
+            List<System.Drawing.Point> player2Pos = new List<System.Drawing.Point>();
+            for (int i = 0; i < 8; i++)
+            {
+                player1Pos.Add(new System.Drawing.Point(i, 7));
+                player2Pos.Add(new System.Drawing.Point(i, 0));
+            }
+
+            player1Pos.Shuffle();
+            player2Pos.Shuffle();
+
+            List<Piece> pieces = new List<Piece>();
+            for (int i = 0; i < 8; i++)
+            {
+                pieces.Add(new Piece(false, player1Pos[i], (PieceColor)i));
+                pieces.Add(new Piece(true, player2Pos[i], (PieceColor)i));
+            }
+
+            pieces[0] = new Sumo(false, pieces[0].Position, (PieceColor)0);
+            pieces[2] = new Sumo(false, pieces[2].Position, (PieceColor)1);
+
+            pieces[1] = new Sumo(true, pieces[1].Position, (PieceColor)0);
+            pieces[3] = new Sumo(true, pieces[3].Position, (PieceColor)1);
+
+            GameState startState = new GameState(pieces, null);
+
+            GameEngine engine = new GameEngine(player1, player2, startState);
             GamePlayViewModel gpvm = new GamePlayViewModel(engine);
             
             engine.StateChanged += gpvm.OnGameStateChanged;
@@ -46,22 +72,14 @@ namespace Kamisado
             window.Show();
         }
 
-        /*private double PiecesInStriking(GameState currentState, bool imPlayerTwo)
+        private double PiecesInStriking(GameState currentState, bool imPlayerTwo)
         {
             int numStriking = 0;
-            foreach (System.Drawing.Point myPiece in currentState.PiecePositions[Convert.ToInt32(imPlayerTwo)])
+            foreach (Piece myPiece in currentState.PiecePositions[Convert.ToInt32(imPlayerTwo)])
             {
-                LinkedList<Move> possibleMoves;
-                if (imPlayerTwo)
-                {
-                    possibleMoves = currentState.GenerateNextMovesPlayerTwo(myPiece);
-                }
-                else
-                {
-                    possibleMoves = currentState.GenerateNextMovesPlayerOne(myPiece);
-                }
+                List<IMove> possibleMoves = myPiece.GetPossibleMoves(currentState);
 
-                foreach (Move m in possibleMoves)
+                foreach (IMove m in possibleMoves)
                 {
                     if (imPlayerTwo && m.End.Y == 7)
                     {
@@ -77,6 +95,23 @@ namespace Kamisado
             }
 
             return ((double)numStriking) / 8.0;
-        }*/
+        }
+    }
+
+    static class MyExtensions
+    {
+        static readonly Random Random = new Random();
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = Random.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
     }
 }

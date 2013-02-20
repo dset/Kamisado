@@ -92,5 +92,10 @@ namespace Kamisado
 
             return _piece == m._piece && _end.Equals(m._end);
         }
+
+        public override string ToString()
+        {
+            return "Color " + _piece.Color + ", Start " + _piece.Position + ", End " + _end;
+        }
     }
 }

@@ -18,12 +18,12 @@ namespace Kamisado
 
         public IPlayer ActivePlayer { get; private set; }
 
-        public GameEngine(IPlayer player1, IPlayer player2)
+        public GameEngine(IPlayer player1, IPlayer player2, GameState startState)
         {
             Player1 = player1;
             Player2 = player2;
             ActivePlayer = Player1;
-            CurrentState = new GameState();
+            CurrentState = startState;
         }
 
 
