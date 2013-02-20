@@ -14,6 +14,7 @@ namespace Kamisado
         private Point _start;
         private Point _end;
 
+        private int _numPushed;
         private Piece _oldPieceToMove;
 
         public bool IsTrivial
@@ -49,24 +50,31 @@ namespace Kamisado
 
         public GameState Execute()
         {
+            _numPushed = 0;
             _oldPieceToMove = _state.PieceToMove;
             _start = _piece.Position;
 
             int ystep = _end.Y - _start.Y;
 
-            Piece otherPiece = _state.BoardPositions[_start.Y + ystep][_start.X];
-            _state.BoardPositions[_start.Y + ystep + ystep][_start.X] = otherPiece;
-            _state.BoardPositions[_start.Y + ystep][_start.X] = _piece;
-            _state.BoardPositions[_start.Y][_start.X] = null;
+            _state.BoardPositions[_piece.Position.Y][_piece.Position.X] = null;
+            Piece currentPiece = _piece;
+            while (_state.BoardPositions[currentPiece.Position.Y + ystep][currentPiece.Position.X] != null)
+            {
+                Piece next = _state.BoardPositions[currentPiece.Position.Y + ystep][currentPiece.Position.X];
+                _state.BoardPositions[currentPiece.Position.Y + ystep][currentPiece.Position.X] = currentPiece;
+                currentPiece.Position = new Point(currentPiece.Position.X, currentPiece.Position.Y + ystep);
+                currentPiece = next;
+                _numPushed++;
+            }
 
-            otherPiece.Position = new Point(_start.X, _start.Y + ystep + ystep);
-            _piece.Position = _end;
+            _state.BoardPositions[currentPiece.Position.Y + ystep][currentPiece.Position.X] = currentPiece;
+            currentPiece.Position = new Point(currentPiece.Position.X, currentPiece.Position.Y + ystep);
 
             _state.IsPlayerTwo = !_state.IsPlayerTwo;
-            _state.PieceToMove = otherPiece;
+            _state.PieceToMove = currentPiece;
 
             List<IMove> possible = new List<IMove>();
-            possible.Add(new Move(_state, otherPiece, otherPiece.Position));
+            possible.Add(new Move(_state, currentPiece, currentPiece.Position));
             _state.PossibleMoves = possible;
 
             return _state;
@@ -76,12 +84,18 @@ namespace Kamisado
         {
             int ystep = _end.Y - _start.Y;
 
-            Piece otherPiece = _state.BoardPositions[_start.Y + ystep + ystep][_start.X];
-            _state.BoardPositions[_start.Y + ystep + ystep][_start.X] = null;
-            _state.BoardPositions[_start.Y + ystep][_start.X] = otherPiece;
-            _state.BoardPositions[_start.Y][_start.X] = _piece;
+            int currentY = _piece.Position.Y + ystep * _numPushed;
+            Piece currentPiece = _state.BoardPositions[currentY][_piece.Position.X];
+            _state.BoardPositions[currentY][_piece.Position.X] = null;
+            while (_state.BoardPositions[currentPiece.Position.Y - ystep][currentPiece.Position.X] != null)
+            {
+                Piece next = _state.BoardPositions[currentPiece.Position.Y - ystep][currentPiece.Position.X];
+                _state.BoardPositions[currentPiece.Position.Y - ystep][currentPiece.Position.X] = currentPiece;
+                currentPiece.Position = new Point(currentPiece.Position.X, currentPiece.Position.Y - ystep);
+                currentPiece = next;
+            }
 
-            otherPiece.Position = new Point(_start.X, _start.Y + ystep);
+            _state.BoardPositions[_start.Y][_start.X] = _piece;
             _piece.Position = _start;
 
             _state.IsPlayerTwo = !_state.IsPlayerTwo;

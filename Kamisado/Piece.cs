@@ -13,13 +13,15 @@ namespace Kamisado
         public Point Position { get; set; }
         public PieceColor Color { get; private set; }
         public int MaxMoveLength { get; protected set; }
+        public int Sumoness { get; private set; }
 
-        public Piece(bool belongsToPlayerTwo, Point position, PieceColor color)
+        public Piece(bool belongsToPlayerTwo, Point position, PieceColor color, int sumoness)
         {
             BelongsToPlayerTwo = belongsToPlayerTwo;
             Position = position;
             Color = color;
-            MaxMoveLength = 7;
+            MaxMoveLength = 7 - 2 * sumoness;
+            Sumoness = sumoness;
         }
 
         public List<IMove> GetPossibleMoves(GameState state)
@@ -46,7 +48,60 @@ namespace Kamisado
 
         protected virtual List<IMove> GenerateStraightMoves(GameState state, int maxLength, int ystep)
         {
-            return GenerateMovesOnLine(state, MaxMoveLength, 0, ystep);
+            if (0 <= Position.Y + ystep && Position.Y + ystep < 8 && state.BoardPositions[Position.Y + ystep][Position.X] != null)
+            {
+                return GenerateSumoPushMoves(state, ystep);
+            }
+            else
+            {
+                return GenerateMovesOnLine(state, MaxMoveLength, 0, ystep);
+            }
+        }
+
+        private List<IMove> GenerateSumoPushMoves(GameState state, int ystep)
+        {
+            if (Sumoness == 0)
+            {
+                return new List<IMove>();
+            }
+
+            int currentX = Position.X;
+            int currentY = Position.Y;
+            bool goodGuys = true;
+            bool foundNull = false;
+
+            for (int i = 0; i <= Sumoness; i++)
+            {
+                currentY += ystep;
+                if (currentY < 0 || currentY >= 8)
+                {
+                    break;
+                }
+
+                if (state.BoardPositions[currentY][currentX] == null)
+                {
+                    foundNull = true;
+                    break;
+                }
+
+                if (Sumoness <= state.BoardPositions[currentY][currentX].Sumoness ||
+                    state.BoardPositions[currentY][currentX].BelongsToPlayerTwo == BelongsToPlayerTwo)
+                {
+                    goodGuys = false;
+                    break;
+                }
+            }
+
+            if (foundNull && goodGuys)
+            {
+                List<IMove> res = new List<IMove>();
+                res.Add(new SumoPushMove(state, this, new Point(Position.X, Position.Y + ystep)));
+                return res;
+            }
+            else
+            {
+                return new List<IMove>();
+            }
         }
 
         protected List<IMove> GenerateMovesOnLine(GameState state, int maxLength, int xstep, int ystep)

@@ -146,10 +146,10 @@ namespace Kamisado
 
             for (int i = 0; i < 8; i++)
             {
-                PiecePositions[0][i] = new Piece(false, new Point(i, 7), (PieceColor)i);
+                PiecePositions[0][i] = new Piece(false, new Point(i, 7), (PieceColor)i, 0);
                 BoardPositions[7][i] = PiecePositions[0][i];
 
-                PiecePositions[1][i] = new Piece(true, new Point(7 - i, 0), (PieceColor)i);
+                PiecePositions[1][i] = new Piece(true, new Point(7 - i, 0), (PieceColor)i, 0);
                 BoardPositions[0][7 - i] = PiecePositions[1][i];
 
             }

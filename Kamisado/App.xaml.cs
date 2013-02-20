@@ -40,15 +40,17 @@ namespace Kamisado
             List<Piece> pieces = new List<Piece>();
             for (int i = 0; i < 8; i++)
             {
-                pieces.Add(new Piece(false, player1Pos[i], (PieceColor)i));
-                pieces.Add(new Piece(true, player2Pos[i], (PieceColor)i));
+                pieces.Add(new Piece(false, player1Pos[i], (PieceColor)i, 0));
+                pieces.Add(new Piece(true, player2Pos[i], (PieceColor)i, 0));
             }
 
-            pieces[0] = new Sumo(false, pieces[0].Position, (PieceColor)0);
-            pieces[2] = new Sumo(false, pieces[2].Position, (PieceColor)1);
+            pieces[2] = new Piece(false, pieces[2].Position, (PieceColor)1, 3);
+            //pieces[2] = new Piece(false, pieces[2].Position, (PieceColor)1, 2);
 
-            pieces[1] = new Sumo(true, pieces[1].Position, (PieceColor)0);
-            pieces[3] = new Sumo(true, pieces[3].Position, (PieceColor)1);
+            pieces[1] = new Piece(true, pieces[1].Position, (PieceColor)0, 1);
+            pieces[3] = new Piece(true, pieces[3].Position, (PieceColor)1, 1);
+            pieces[5] = new Piece(true, pieces[5].Position, (PieceColor)2, 1);
+            pieces[7] = new Piece(true, pieces[7].Position, (PieceColor)3, 1);
 
             GameState startState = new GameState(pieces, null);
 
