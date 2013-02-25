@@ -27,21 +27,23 @@ namespace Kamisado
             IMove[] moves = new IMove[currentState.PossibleMoves.Count];
             currentState.PossibleMoves.CopyTo(moves, 0);
 
-            double[] moveValues = new double[moves.Length];
+            BranchInfo[] moveValues = new BranchInfo[moves.Length];
 
             for (int i = 0; i < moves.Length; i++)
             {
                 moves[i].Execute();
                 moveValues[i] = Min(currentState, 1, Double.MinValue, Double.MaxValue);
                 moves[i].Reverse();
-                Debug.WriteLine(moves[i] + "  value " + moveValues[i] + " ");
+                Debug.WriteLine(moves[i] + " " + moveValues[i] + " ");
             }
 
-            double best = Double.MinValue;
+            BranchInfo best = moveValues[0];
             IMove bestMove = moves[0];
             for (int i = 0; i < moves.Length; i++)
             {
-                if (moveValues[i] > best)
+                if ((moveValues[i].Value > best.Value) ||
+                    (best.Value <= Double.MinValue / 4 && best.Value == moveValues[i].Value && moveValues[i].Depth > best.Depth) ||
+                    (best.Value >= Double.MaxValue / 4 && best.Value == moveValues[i].Value && moveValues[i].Depth < best.Depth))
                 {
                     best = moveValues[i];
                     bestMove = moves[i];
@@ -51,55 +53,71 @@ namespace Kamisado
             return bestMove;
         }
 
-        private double Max(GameState gs, int depth, double alpha, double beta)
+        private BranchInfo Max(GameState gs, int depth, double alpha, double beta)
         {
             if (depth >= _maxDepth || gs.PlayerTwoWinning.HasValue)
             {
-                return EvaluateGameState(gs);
+                return new BranchInfo(EvaluateGameState(gs), depth);
             }
 
-            double v = Double.MinValue;
+            BranchInfo v = new BranchInfo(Double.MinValue, 0);
 
             IEnumerable<IMove> possibleMoves = gs.PossibleMoves.Reverse<IMove>();
 
             foreach (IMove move in possibleMoves)
             {
                 move.Execute();
-                v = Math.Max(v, Min(gs, depth + 1, alpha, beta));
+
+                BranchInfo current = Min(gs, depth + 1, alpha, beta);
+                if ((current.Value > v.Value) ||
+                    (v.Value <= Double.MinValue / 4 && v.Value == current.Value && current.Depth > v.Depth) ||
+                    (v.Value >= Double.MaxValue / 4 && v.Value == current.Value && current.Depth < v.Depth))
+                {
+                    v = current;
+                }
+
                 move.Reverse();
-                if (v >= beta)
+                if (v.Value >= beta)
                 {
                     return v;
                 }
 
-                alpha = Math.Max(alpha, v);
+                alpha = Math.Max(alpha, v.Value);
             }
 
             return v;
         }
 
-        private double Min(GameState gs, int depth, double alpha, double beta)
+        private BranchInfo Min(GameState gs, int depth, double alpha, double beta)
         {
             if (depth >= _maxDepth || gs.PlayerTwoWinning.HasValue)
             {
-                return EvaluateGameState(gs);
+                return new BranchInfo(EvaluateGameState(gs), depth);
             }
 
-            double v = Double.MaxValue;
+            BranchInfo v = new BranchInfo(Double.MaxValue, 0);
 
             IEnumerable<IMove> possibleMoves = gs.PossibleMoves.Reverse<IMove>();
 
             foreach (IMove move in possibleMoves)
             {
                 move.Execute();
-                v = Math.Min(v, Max(gs, depth + 1, alpha, beta));
+
+                BranchInfo current = Max(gs, depth + 1, alpha, beta);
+                if ((current.Value < v.Value) ||
+                    (v.Value <= Double.MinValue / 4 && v.Value == current.Value && current.Depth < v.Depth) ||
+                    (v.Value >= Double.MaxValue / 4 && v.Value == current.Value && current.Depth > v.Depth))
+                {
+                    v = current;
+                }
+
                 move.Reverse();
-                if (v <= alpha)
+                if (v.Value <= alpha)
                 {
                     return v;
                 }
 
-                beta = Math.Min(beta, v);
+                beta = Math.Min(beta, v.Value);
             }
 
             return v;
