@@ -16,6 +16,7 @@ namespace Kamisado
 
         private int _numPushed;
         private Piece _oldPieceToMove;
+        private IMove _oldLastMove;
 
         public bool IsTrivial
         {
@@ -52,6 +53,7 @@ namespace Kamisado
         {
             _numPushed = 0;
             _oldPieceToMove = _state.PieceToMove;
+            _oldLastMove = _state.LastMove;
             _start = _piece.Position;
 
             int ystep = _end.Y - _start.Y;
@@ -72,6 +74,7 @@ namespace Kamisado
 
             _state.IsPlayerTwo = !_state.IsPlayerTwo;
             _state.PieceToMove = currentPiece;
+            _state.LastMove = this;
 
             List<IMove> possible = new List<IMove>();
             possible.Add(new Move(_state, currentPiece, currentPiece.Position));
@@ -100,6 +103,7 @@ namespace Kamisado
 
             _state.IsPlayerTwo = !_state.IsPlayerTwo;
             _state.PieceToMove = _oldPieceToMove;
+            _state.LastMove = _oldLastMove;
             _state.PossibleMoves = null;
 
             return _state;

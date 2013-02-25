@@ -15,6 +15,7 @@ namespace Kamisado
         private Point _end;
 
         private Piece _oldPieceToMove;
+        private IMove _oldLastMove;
 
         public bool IsTrivial
         {
@@ -50,6 +51,7 @@ namespace Kamisado
         public GameState Execute()
         {
             _oldPieceToMove = _state.PieceToMove;
+            _oldLastMove = _state.LastMove;
             _start = _piece.Position;
 
             _state.BoardPositions[_start.Y][_start.X] = null;
@@ -59,6 +61,7 @@ namespace Kamisado
             _state.IsPlayerTwo = !_state.IsPlayerTwo;
             _state.PieceToMove = _state.PiecePositions[_state.IsPlayerTwo ? 1 : 0][(int)Board.Tile[_end.Y, _end.X]];
             _state.PossibleMoves = null;
+            _state.LastMove = this;
 
             return _state;
         }
@@ -71,6 +74,7 @@ namespace Kamisado
 
             _state.IsPlayerTwo = !_state.IsPlayerTwo;
             _state.PieceToMove = _oldPieceToMove;
+            _state.LastMove = _oldLastMove;
             _state.PossibleMoves = null;
 
             return _state;

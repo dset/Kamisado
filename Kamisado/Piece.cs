@@ -9,7 +9,7 @@ namespace Kamisado
 {
     public class Piece
     {
-        public bool BelongsToPlayerTwo { get; private set; }
+        public bool BelongsToPlayerTwo { get; set; }
         public Point Position { get; set; }
         public PieceColor Color { get; private set; }
         public int MaxMoveLength { get; protected set; }

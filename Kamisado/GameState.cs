@@ -14,6 +14,100 @@ namespace Kamisado
         public Piece[][] PiecePositions { get; set; }
         public Piece[][] BoardPositions { get; set; }
         public Piece PieceToMove { get; set; }
+        public IMove LastMove { get; set; }
+
+        public static GameState GenerateNextRound(GameState endState, bool left)
+        {
+            List<Piece> oldPieces = new List<Piece>();
+            oldPieces.AddRange(endState.PiecePositions[0]);
+            oldPieces.AddRange(endState.PiecePositions[1]);
+            List<Piece> newPiecesOne = new List<Piece>();
+            List<Piece> newPiecesTwo = new List<Piece>();
+
+            Piece winningPiece;
+            if (endState.IsPieceWinning().HasValue)
+            {
+                winningPiece = endState.BoardPositions[endState.LastMove.End.Y][endState.LastMove.End.X];
+            }
+            else
+            {
+                PieceColor winningColor = Board.Tile[endState.LastMove.End.Y, endState.LastMove.End.X];
+                winningPiece = endState.PiecePositions[endState.IsPlayerTwo ? 1 : 0][(int)winningColor];
+            }
+
+            oldPieces.Remove(winningPiece);
+            foreach (Piece oldPiece in oldPieces)
+            {
+                if (oldPiece.BelongsToPlayerTwo)
+                {
+                    newPiecesTwo.Add(new Piece(oldPiece.BelongsToPlayerTwo, oldPiece.Position, oldPiece.Color, oldPiece.Sumoness));
+                }
+                else
+                {
+                    newPiecesOne.Add(new Piece(oldPiece.BelongsToPlayerTwo, oldPiece.Position, oldPiece.Color, oldPiece.Sumoness));
+                }
+            }
+            if (winningPiece.BelongsToPlayerTwo)
+            {
+                newPiecesTwo.Add(new Piece(winningPiece.BelongsToPlayerTwo, winningPiece.Position, winningPiece.Color, winningPiece.Sumoness + 1));
+            }
+            else
+            {
+                newPiecesOne.Add(new Piece(winningPiece.BelongsToPlayerTwo, winningPiece.Position, winningPiece.Color, winningPiece.Sumoness + 1));
+            }
+
+            Comparison<Piece> comp = new Comparison<Piece>((Piece p1, Piece p2) =>
+                {
+                    if (p1.Position.Y == p2.Position.Y)
+                    {
+                        return (left ? 1 : -1) * (p1.Position.X - p2.Position.X);
+                    }
+                    else
+                    {
+                        return p2.Position.Y - p1.Position.Y;
+                    }
+                });
+
+            newPiecesOne.Sort(comp);
+            newPiecesTwo.Sort(comp);
+
+            if (endState.PlayerTwoWinning.Value)
+            {
+                if (!left)
+                {
+                    newPiecesOne.Reverse();
+                    newPiecesTwo.Reverse();
+                }
+
+                for (int i = 0; i < 8; i++)
+                {
+                    newPiecesOne[i].Position = new Point(i, 7);
+                    newPiecesTwo[i].Position = new Point(i, 0);
+                }
+            }
+            else
+            {
+                if (left)
+                {
+                    newPiecesOne.Reverse();
+                    newPiecesTwo.Reverse();
+                }
+
+                for (int i = 0; i < 8; i++)
+                {
+                    newPiecesOne[i].BelongsToPlayerTwo = true;
+                    newPiecesOne[i].Position = new Point(i, 0);
+
+                    newPiecesTwo[i].BelongsToPlayerTwo = false;
+                    newPiecesTwo[i].Position = new Point(i, 7);
+                }
+            }
+
+            List<Piece> newPieces = new List<Piece>();
+            newPieces.AddRange(newPiecesOne);
+            newPieces.AddRange(newPiecesTwo);
+            return new GameState(newPieces, null);
+        }
 
         public bool? PlayerTwoWinning
         {
@@ -130,6 +224,8 @@ namespace Kamisado
 
             PieceToMove = null;
 
+            LastMove = null;
+
             BoardPositions = new Piece[8][];
             for (int i = 0; i < 8; i++)
             {
@@ -167,6 +263,8 @@ namespace Kamisado
                 IsPlayerTwo = pieceToMove.BelongsToPlayerTwo;
                 PieceToMove = pieceToMove;
             }
+
+            LastMove = null;
 
             BoardPositions = new Piece[8][];
             for (int i = 0; i < 8; i++)
