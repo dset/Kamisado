@@ -8,6 +8,6 @@ namespace Kamisado
 {
     interface IPlayer
     {
-        IMove GetMove(GameState currentState);
+        MoveInfo GetMove(GameState currentState);
     }
 }

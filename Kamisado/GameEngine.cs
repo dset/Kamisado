@@ -31,7 +31,7 @@ namespace Kamisado
         {
             while (true)
             {
-                IMove move = ActivePlayer.GetMove(CurrentState);
+                IMove move = ActivePlayer.GetMove(CurrentState).Move;
                 move.Execute();
                 NotifyStateChanged();
 

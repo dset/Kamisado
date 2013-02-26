@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kamisado", "Kamisado\Kamisa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KamisadoTests", "KamisadoTests\KamisadoTests.csproj", "{5175FB20-423C-4696-9B34-E50D484F9D83}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IterativeDeepening", "IterativeDeepening\IterativeDeepening.csproj", "{C4277378-6765-4001-A836-A8F396E3D99E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{5175FB20-423C-4696-9B34-E50D484F9D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5175FB20-423C-4696-9B34-E50D484F9D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5175FB20-423C-4696-9B34-E50D484F9D83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4277378-6765-4001-A836-A8F396E3D99E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4277378-6765-4001-A836-A8F396E3D99E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4277378-6765-4001-A836-A8F396E3D99E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4277378-6765-4001-A836-A8F396E3D99E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

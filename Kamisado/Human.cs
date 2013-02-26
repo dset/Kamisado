@@ -16,12 +16,12 @@ namespace Kamisado
             GotMove = false;
         }
 
-        public IMove GetMove(GameState currentState)
+        public MoveInfo GetMove(GameState currentState)
         {
             while (!GotMove) ;
             GotMove = false;
 
-            return ChosenMove;
+            return new MoveInfo(ChosenMove, 0);
         }
     }
 }

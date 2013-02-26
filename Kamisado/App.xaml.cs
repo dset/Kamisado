@@ -19,12 +19,12 @@ namespace Kamisado
         {
             Func<GameState, bool, double> evaluator = (currentState, imPlayerTwo) =>
                 {
-                    return 1.3 * PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
-                    //return 0;
+                    //return 1.3 * PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
+                    return 0;
                 };
 
-            IPlayer player1 = new Human();
-            IPlayer player2 = new Bot(7, evaluator);
+            IPlayer player1 = new Bot(17, evaluator);
+            IPlayer player2 = new Human();
 
             List<Piece> pieces = new List<Piece>();
             pieces.Add(new Piece(false, new System.Drawing.Point(2, 3), PieceColor.Brown, 0));

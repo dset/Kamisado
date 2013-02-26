@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace Kamisado
 {
-    class Bot : IPlayer
+    public class Bot : IPlayer
     {
         private Func<GameState, bool, double> _evaluate;
         private int _maxDepth;
@@ -20,7 +20,7 @@ namespace Kamisado
             _evaluate = evaluate;
         }
 
-        public IMove GetMove(GameState currentState)
+        public MoveInfo GetMove(GameState currentState)
         {
             _imPlayerTwo = currentState.IsPlayerTwo;
 
@@ -50,7 +50,7 @@ namespace Kamisado
                 }
             }
 
-            return bestMove;
+            return new MoveInfo(bestMove, best.Value);
         }
 
         private BranchInfo Max(GameState gs, int depth, double alpha, double beta)
