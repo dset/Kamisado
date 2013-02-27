@@ -14,11 +14,13 @@ namespace Kamisado
         public event PropertyChangedEventHandler PropertyChanged;
 
         public RelayCommand SelectTileCommand { get; private set; }
+
+        private GameState _displayState;
         public GameState CurrentState
         {
             get
             {
-                return _engine.CurrentState;
+                return _displayState;
             }
         }
 
@@ -28,6 +30,7 @@ namespace Kamisado
         public GamePlayViewModel(GameEngine engine)
         {
             _engine = engine;
+            UpdateDisplayState();
             _selectedPiece = null;
             SelectTileCommand = new RelayCommand(param =>
             {
@@ -44,7 +47,7 @@ namespace Kamisado
                 {
                     Point chosenPoint = ParamToPoint(param);
                     IMove chosenMove = null;
-                    foreach (IMove move in CurrentState.PossibleMoves)
+                    foreach (IMove move in engine.CurrentState.PossibleMoves)
                     {
                         if(move.Piece == _selectedPiece && move.End.Equals(chosenPoint))
                         {
@@ -65,7 +68,38 @@ namespace Kamisado
 
         public void OnGameStateChanged(object sender, EventArgs e)
         {
+            UpdateDisplayState();
             NotifyPropertyChanged("CurrentState");
+        }
+
+        private void UpdateDisplayState()
+        {
+            List<Piece> pieces = new List<Piece>();
+
+            foreach (Piece piece in _engine.CurrentState.PiecePositions[0])
+            {
+                pieces.Add(new Piece(false, new Point(piece.Position.X, piece.Position.Y), piece.Color, piece.Sumoness));
+            }
+
+            foreach (Piece piece in _engine.CurrentState.PiecePositions[1])
+            {
+                pieces.Add(new Piece(true, new Point(piece.Position.X, piece.Position.Y), piece.Color, piece.Sumoness));
+            }
+
+            Piece pieceToMove = null;
+            if (_engine.CurrentState.PieceToMove != null)
+            {
+                foreach (Piece p in pieces)
+                {
+                    if (p.Position.Equals(_engine.CurrentState.PieceToMove.Position))
+                    {
+                        pieceToMove = p;
+                        break;
+                    }
+                }
+            }
+
+            _displayState = new GameState(pieces, pieceToMove);
         }
 
         public void OnGameOver(object sender, GameOverEventArgs e)
