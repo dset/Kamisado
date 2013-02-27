@@ -7,7 +7,7 @@
       d:DesignHeight="300" d:DesignWidth="300"
 	Title="GamePlayPage">
 
-    <Grid>
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
@@ -100,7 +100,7 @@
         <Button Grid.Row="7" Grid.Column="5" Command="{Binding Path=SelectTileCommand}" CommandParameter="7 5" Background="Purple" />
         <Button Grid.Row="7" Grid.Column="6" Command="{Binding Path=SelectTileCommand}" CommandParameter="7 6" Background="Blue" />
         <Button Grid.Row="7" Grid.Column="7" Command="{Binding Path=SelectTileCommand}" CommandParameter="7 7" Background="Orange" />
-        
+
         <Ellipse
             Grid.Row="{Binding Path=CurrentState.PiecePositions[0][0].Position.Y}"
             Grid.Column="{Binding Path=CurrentState.PiecePositions[0][0].Position.X}"
@@ -269,7 +269,7 @@
             Stretch="Fill"
             StrokeThickness="0"
             Stroke="White"
-            Margin="25 25 25 25"
+            Margin="30 30 30 30"
             IsHitTestVisible="False">
 
             <Ellipse.Style>
@@ -286,6 +286,358 @@
             </Ellipse.Style>
             
         </Ellipse>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][0].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][0].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[0][0].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[0][0].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][1].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][1].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[0][1].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[0][1].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][2].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][2].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[0][2].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[0][2].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][3].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][3].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[0][3].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[0][3].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][4].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][4].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[0][4].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[0][4].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][5].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][5].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[0][5].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[0][5].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][6].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][6].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[0][6].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[0][6].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[0][7].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[0][7].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[0][7].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[0][7].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][0].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][0].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[1][0].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[1][0].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][1].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][1].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[1][1].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[1][1].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][2].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][2].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[1][2].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[1][2].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][3].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][3].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[1][3].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[1][3].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][4].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][4].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[1][4].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[1][4].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][5].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][5].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[1][5].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[1][5].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][6].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][6].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[1][6].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[1][6].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="{Binding Path=CurrentState.PiecePositions[1][7].Position.Y}"
+            Grid.Column="{Binding Path=CurrentState.PiecePositions[1][7].Position.X}"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            Text="{Binding Path=CurrentState.PiecePositions[1][7].Sumoness}"
+            >
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentState.PiecePositions[1][7].Sumoness}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden">
+
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
 
     </Grid>
 </Page>
