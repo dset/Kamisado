@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Kamisado
 {
-    interface IPlayer
+    public interface IPlayer
     {
+        int Score { get; set; }
         MoveInfo GetMove(GameState currentState);
     }
 }

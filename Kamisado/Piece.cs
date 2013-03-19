@@ -46,6 +46,11 @@ namespace Kamisado
             return res;
         }
 
+        public Piece Copy()
+        {
+            return new Piece(BelongsToPlayerTwo, new Point(Position.X, Position.Y), Color, Sumoness);
+        }
+
         protected virtual List<IMove> GenerateStraightMoves(GameState state, int maxLength, int ystep)
         {
             if (0 <= Position.Y + ystep && Position.Y + ystep < 8 && state.BoardPositions[Position.Y + ystep][Position.X] != null)

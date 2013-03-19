@@ -62,9 +62,12 @@
     <Compile Include="IMove.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="BranchInfo.cs" />
+    <Compile Include="MatchEngine.cs" />
+    <Compile Include="MatchInfo.cs" />
     <Compile Include="MoveInfo.cs" />
     <Compile Include="Piece.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="RoundInfo.cs" />
     <Compile Include="SumoPushMove.cs" />
     <Page Include="GamePlayPage.xaml">
       <SubType>Designer</SubType>

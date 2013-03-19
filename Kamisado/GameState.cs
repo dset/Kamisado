@@ -24,16 +24,7 @@ namespace Kamisado
             List<Piece> newPiecesOne = new List<Piece>();
             List<Piece> newPiecesTwo = new List<Piece>();
 
-            Piece winningPiece;
-            if (endState.IsPieceWinning().HasValue)
-            {
-                winningPiece = endState.BoardPositions[endState.LastMove.End.Y][endState.LastMove.End.X];
-            }
-            else
-            {
-                PieceColor winningColor = Board.Tile[endState.LastMove.End.Y, endState.LastMove.End.X];
-                winningPiece = endState.PiecePositions[endState.IsPlayerTwo ? 1 : 0][(int)winningColor];
-            }
+            Piece winningPiece = endState.WinningPiece;
 
             oldPieces.Remove(winningPiece);
             foreach (Piece oldPiece in oldPieces)
@@ -107,6 +98,25 @@ namespace Kamisado
             newPieces.AddRange(newPiecesOne);
             newPieces.AddRange(newPiecesTwo);
             return new GameState(newPieces, null);
+        }
+
+        public Piece WinningPiece
+        {
+            get
+            {
+                Piece winningPiece;
+                if (IsPieceWinning().HasValue)
+                {
+                    winningPiece = BoardPositions[LastMove.End.Y][LastMove.End.X];
+                }
+                else
+                {
+                    PieceColor winningColor = Board.Tile[LastMove.End.Y, LastMove.End.X];
+                    winningPiece = PiecePositions[IsPlayerTwo ? 1 : 0][(int)winningColor];
+                }
+
+                return winningPiece;
+            }
         }
 
         public bool? PlayerTwoWinning
@@ -216,6 +226,31 @@ namespace Kamisado
             {
                 return PieceToMove.GetPossibleMoves(this);
             }
+        }
+
+        public GameState Copy()
+        {
+            List<Piece> pieces = new List<Piece>();
+            Piece pieceToMove = null;
+            for (int i = 0; i < 8; i++)
+            {
+                pieces.Add(PiecePositions[0][i].Copy());
+                pieces.Add(PiecePositions[1][i].Copy());
+            }
+
+            if (PieceToMove != null)
+            {
+                foreach (Piece p in pieces)
+                {
+                    if (p.Position.Equals(PieceToMove.Position))
+                    {
+                        pieceToMove = p;
+                        break;
+                    }
+                }
+            }
+
+            return new GameState(pieces, pieceToMove);
         }
 
         public GameState()

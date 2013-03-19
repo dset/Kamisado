@@ -10,11 +10,18 @@ namespace Kamisado
     {
         public IMove Move { get; private set; }
         public double Value { get; private set; }
+        public int Depth { get; private set; }
 
-        public MoveInfo(IMove move, double value)
+        public MoveInfo(IMove move, double value, int depth)
         {
             Move = move;
             Value = value;
+            Depth = depth;
+        }
+
+        public override string ToString()
+        {
+            return Move + " with value " + Value + " at depth " + Depth;
         }
     }
 }

@@ -74,32 +74,7 @@ namespace Kamisado
 
         private void UpdateDisplayState()
         {
-            List<Piece> pieces = new List<Piece>();
-
-            foreach (Piece piece in _engine.CurrentState.PiecePositions[0])
-            {
-                pieces.Add(new Piece(false, new Point(piece.Position.X, piece.Position.Y), piece.Color, piece.Sumoness));
-            }
-
-            foreach (Piece piece in _engine.CurrentState.PiecePositions[1])
-            {
-                pieces.Add(new Piece(true, new Point(piece.Position.X, piece.Position.Y), piece.Color, piece.Sumoness));
-            }
-
-            Piece pieceToMove = null;
-            if (_engine.CurrentState.PieceToMove != null)
-            {
-                foreach (Piece p in pieces)
-                {
-                    if (p.Position.Equals(_engine.CurrentState.PieceToMove.Position))
-                    {
-                        pieceToMove = p;
-                        break;
-                    }
-                }
-            }
-
-            _displayState = new GameState(pieces, pieceToMove);
+            _displayState = _engine.CurrentState.Copy();
         }
 
         public void OnGameOver(object sender, GameOverEventArgs e)
