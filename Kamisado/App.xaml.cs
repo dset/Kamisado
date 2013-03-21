@@ -19,12 +19,13 @@ namespace Kamisado
         {
             Func<GameState, bool, double> evaluator = (currentState, imPlayerTwo) =>
                 {
-                    return 1.3 * PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
+                    return NumPossibleMoves(currentState, imPlayerTwo) - NumPossibleMoves(currentState, !imPlayerTwo) +
+                    MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
                     //return 0;
                 };
 
-            IPlayer player1 = new Bot(5, evaluator);
-            IPlayer player2 = new Human();
+            IPlayer player1 = new Human();
+            IPlayer player2 = new Bot(3, evaluator);
 
             GameEngine engine = new GameEngine(player1, player2, new GameState());
             GamePlayViewModel gpvm = new GamePlayViewModel(engine);
@@ -69,6 +70,35 @@ namespace Kamisado
             }
 
             return ((double)numStriking) / 8.0;
+        }
+
+        private static double NumPossibleMoves(GameState currentState, bool imPlayerTwo)
+        {
+            int numPossible = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                numPossible += currentState.PiecePositions[imPlayerTwo ? 1 : 0][i].GetPossibleMoves(currentState).Count;
+            }
+
+            return ((double)numPossible) / 102.0;
+        }
+
+        private static double MoveFar(GameState currentState, bool imPlayerTwo)
+        {
+            int score = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                if (imPlayerTwo)
+                {
+                    score += currentState.PiecePositions[1][i].Position.Y;
+                }
+                else
+                {
+                    score += 7 - currentState.PiecePositions[0][i].Position.Y;
+                }
+            }
+
+            return ((double)score) / 48;
         }
     }
 

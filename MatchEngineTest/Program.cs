@@ -53,7 +53,36 @@ namespace MatchEngineTest
                 }
             }
 
-            return ((double)numStriking) / 8.0;
+            return ((double)numStriking) / 24.0;
+        }
+
+        private static double NumPossibleMoves(GameState currentState, bool imPlayerTwo)
+        {
+            int numPossible = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                numPossible += currentState.PiecePositions[imPlayerTwo ? 1 : 0][i].GetPossibleMoves(currentState).Count;
+            }
+
+            return ((double)numPossible) / 102.0;
+        }
+
+        private static double MoveFar(GameState currentState, bool imPlayerTwo)
+        {
+            int score = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                if (imPlayerTwo)
+                {
+                    score += currentState.PiecePositions[1][i].Position.Y;
+                }
+                else
+                {
+                    score += 7 - currentState.PiecePositions[0][i].Position.Y;
+                }
+            }
+
+            return ((double)score) / 48;
         }
     }
 }
