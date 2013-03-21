@@ -111,7 +111,7 @@ namespace Kamisado
 
         public override string ToString()
         {
-            return "Sumo Push. Color " + _piece.Color + ", Start " + _piece.Position + ", End " + _end;
+            return "Sumo Push. Color " + _piece.Color + ", Start " + _start + ", End " + _end;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Kamisado
 {
@@ -37,6 +38,17 @@ namespace Kamisado
             while (_player1.Score < _winScore && _player2.Score < _winScore)
             {
                 RoundInfo roundInfo =_engine.Run();
+                if (_startingPlayer == _player1)
+                {
+                    roundInfo.Challenger = "Player 1";
+                    roundInfo.Defender = "Player 2";
+                }
+                else
+                {
+                    roundInfo.Challenger = "Player 2";
+                    roundInfo.Defender = "Player 1";
+                }
+
                 _matchInfo.PlayedRounds.AddLast(roundInfo);
                 if (roundInfo.PlayerTwoWon)
                 {

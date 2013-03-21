@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IterativeDeepening", "Itera
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchEngineTest", "MatchEngineTest\MatchEngineTest.csproj", "{B163923C-C869-4DAD-BB82-3AD64AA59810}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeuristicComparer", "HeuristicComparer\HeuristicComparer.csproj", "{DE15DD15-218C-479C-A606-B40CD6B79890}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{B163923C-C869-4DAD-BB82-3AD64AA59810}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B163923C-C869-4DAD-BB82-3AD64AA59810}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B163923C-C869-4DAD-BB82-3AD64AA59810}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE15DD15-218C-479C-A606-B40CD6B79890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE15DD15-218C-479C-A606-B40CD6B79890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE15DD15-218C-479C-A606-B40CD6B79890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE15DD15-218C-479C-A606-B40CD6B79890}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

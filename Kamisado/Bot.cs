@@ -105,7 +105,7 @@ namespace Kamisado
                     {
                         if (moveValues[depth - 1][index] > Double.MinValue / 4)
                         {
-                            return new MoveInfo(moves[index], lastRowHighestValue, depth);
+                            return new MoveInfo(moves[index], lastRowHighestValue, depth + 1);
                         }
                     }
                 }
@@ -114,6 +114,7 @@ namespace Kamisado
             }
             else
             {
+                lastRowHighestValueIndices.Shuffle();
                 return new MoveInfo(moves[lastRowHighestValueIndices[0]], lastRowHighestValue, _maxDepth);
             }
 
@@ -284,11 +285,11 @@ namespace Kamisado
         {
             if (gs.PlayerTwoWinning.HasValue && ((gs.PlayerTwoWinning.Value && _imPlayerTwo) || (!gs.PlayerTwoWinning.Value && !_imPlayerTwo)))
             {
-                return Double.MaxValue;
+                return Double.MaxValue - 3 + gs.WinningPiece.Sumoness;
             }
             else if (gs.PlayerTwoWinning.HasValue)
             {
-                return Double.MinValue;
+                return Double.MinValue + 3 - gs.WinningPiece.Sumoness;
             }
 
             return _evaluate(gs, _imPlayerTwo);

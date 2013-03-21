@@ -14,19 +14,21 @@ namespace MatchEngineTest
         {
             Func<GameState, bool, double> evaluator = (currentState, imPlayerTwo) =>
             {
-                return 1.3 * PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
+                return 4 * PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
             };
 
             Func<GameState, bool, double> badevaluator = (currentState, imPlayerTwo) =>
             {
-                return 0;
+                return PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
             };
 
-            MatchEngine me = new MatchEngine(new Bot(3, evaluator), new Bot(4, evaluator), 15);
+            MatchEngine me = new MatchEngine(new Bot(4, badevaluator), new Bot(4, evaluator), 15);
 
             MatchInfo i = me.Run();
+            i.Player1Description = "Bot 1 bla bla";
+            i.Player2Description = "Bot 2 bla bla";
 
-            Console.WriteLine("Player two won: " + i.Player2Won + ", Player one score " + i.Player1Score + " player two score " + i.Player2Score);
+            Console.WriteLine(i);
         }
 
         private static double PiecesInStriking(GameState currentState, bool imPlayerTwo)

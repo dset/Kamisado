@@ -99,7 +99,7 @@ namespace Kamisado
 
         public override string ToString()
         {
-            return "Color " + _piece.Color + ", Start " + _piece.Position + ", End " + _end;
+            return "Color " + _piece.Color + ", Start " + _start + ", End " + _end;
         }
     }
 }
