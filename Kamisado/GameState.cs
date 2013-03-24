@@ -31,20 +31,24 @@ namespace Kamisado
             {
                 if (oldPiece.BelongsToPlayerTwo)
                 {
-                    newPiecesTwo.Add(new Piece(oldPiece.BelongsToPlayerTwo, oldPiece.Position, oldPiece.Color, oldPiece.Sumoness));
+                    newPiecesTwo.Add(oldPiece.Copy());
                 }
                 else
                 {
-                    newPiecesOne.Add(new Piece(oldPiece.BelongsToPlayerTwo, oldPiece.Position, oldPiece.Color, oldPiece.Sumoness));
+                    newPiecesOne.Add(oldPiece.Copy());
                 }
             }
             if (winningPiece.BelongsToPlayerTwo)
             {
-                newPiecesTwo.Add(new Piece(winningPiece.BelongsToPlayerTwo, winningPiece.Position, winningPiece.Color, winningPiece.Sumoness + 1));
+                Piece p = winningPiece.Copy();
+                p.Sumoness += 1;
+                newPiecesTwo.Add(p);
             }
             else
             {
-                newPiecesOne.Add(new Piece(winningPiece.BelongsToPlayerTwo, winningPiece.Position, winningPiece.Color, winningPiece.Sumoness + 1));
+                Piece p = winningPiece.Copy();
+                p.Sumoness += 1;
+                newPiecesOne.Add(p);
             }
 
             Comparison<Piece> comp = new Comparison<Piece>((Piece p1, Piece p2) =>
@@ -320,6 +324,28 @@ namespace Kamisado
                 BoardPositions[piece.Position.Y][piece.Position.X] = piece;
                 PiecePositions[piece.BelongsToPlayerTwo ? 1 : 0][(int)piece.Color] = piece;
             }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Challenger pieces:");
+            foreach (Piece challengerPiece in PiecePositions[0])
+            {
+                sb.Append(challengerPiece + ", ");
+            }
+
+            sb.AppendLine();
+
+            sb.AppendLine("Defender pieces:");
+            foreach (Piece defenderPiece in PiecePositions[1])
+            {
+                sb.Append(defenderPiece + ", ");
+            }
+
+            sb.AppendLine();
+
+            return sb.ToString();
         }
 
         /*

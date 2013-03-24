@@ -14,12 +14,12 @@ namespace MatchEngineTest
         {
             Func<GameState, bool, double> evaluator = (currentState, imPlayerTwo) =>
             {
-                return 4 * PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
+                return NumPossibleMoves(currentState, imPlayerTwo) - NumPossibleMoves(currentState, !imPlayerTwo);
             };
 
             Func<GameState, bool, double> badevaluator = (currentState, imPlayerTwo) =>
             {
-                return PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
+                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
             };
 
             MatchEngine me = new MatchEngine(new Bot(4, badevaluator), new Bot(4, evaluator), 15);

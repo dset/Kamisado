@@ -9,6 +9,8 @@ namespace Kamisado
 {
     public class MatchEngine
     {
+        private const int REGROUP_SEARCH_DEPTH = 5;
+
         private IPlayer _player1;
         private IPlayer _player2;
         private GameEngine _engine;
@@ -62,7 +64,23 @@ namespace Kamisado
                     _secondPlayer = tmp;
                 }
 
-                _engine = new GameEngine(_startingPlayer, _secondPlayer, GameState.GenerateNextRound(_engine.CurrentState, false));
+                GameState leftState = GameState.GenerateNextRound(_engine.CurrentState, true);
+                GameState rightState = GameState.GenerateNextRound(_engine.CurrentState, false);
+
+                bool doLeft = true;
+                double leftValue = _secondPlayer.GetMove(leftState, REGROUP_SEARCH_DEPTH).Value;
+                double rightValue = _secondPlayer.GetMove(rightState, REGROUP_SEARCH_DEPTH).Value;
+                Debug.WriteLine("Left value: " + leftValue + ", right value: " + rightValue);
+                if (leftValue > rightValue)
+                {
+                    doLeft = false;
+                }
+
+                roundInfo.LeftValue = leftValue;
+                roundInfo.RightValue = rightValue;
+                roundInfo.DoLeft = doLeft;
+
+                _engine = new GameEngine(_startingPlayer, _secondPlayer, GameState.GenerateNextRound(_engine.CurrentState, doLeft));
             }
 
             _matchInfo.Player1Score = _player1.Score;

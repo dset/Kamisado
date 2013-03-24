@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kamisado
 {
-    class Board
+    public class Board
     {
         public static readonly PieceColor[,] Tile;
 

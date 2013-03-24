@@ -13,7 +13,7 @@ namespace Kamisado
         public Point Position { get; set; }
         public PieceColor Color { get; private set; }
         public int MaxMoveLength { get; protected set; }
-        public int Sumoness { get; private set; }
+        public int Sumoness { get; set; }
 
         public Piece(bool belongsToPlayerTwo, Point position, PieceColor color, int sumoness)
         {
@@ -130,6 +130,11 @@ namespace Kamisado
             }
 
             return res;
+        }
+
+        public override string ToString()
+        {
+            return "Piece: " + Enum.GetName(typeof(PieceColor), Color) + " " + Position + " " + Sumoness;
         }
     }
 }

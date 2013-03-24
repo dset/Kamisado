@@ -14,6 +14,9 @@ namespace Kamisado
         public int Score { get; set; }
         public string Challenger { get; set; }
         public string Defender { get; set; }
+        public double LeftValue { get; set; }
+        public double RightValue { get; set; }
+        public bool DoLeft { get; set; }
 
         public RoundInfo(GameState startState)
         {
@@ -29,10 +32,16 @@ namespace Kamisado
             sb.AppendLine("Winner: " + (PlayerTwoWon? Defender : Challenger));
             sb.AppendLine("Score: " + Score);
             sb.AppendLine("---------------------------");
+            sb.AppendLine(StartState.ToString());
+            sb.AppendLine("---------------------------");
             foreach (MoveInfo move in MadeMoves)
             {
                 sb.AppendLine(move.ToString());
             }
+            sb.AppendLine("Left Value: " + LeftValue);
+            sb.AppendLine("Right Value: " + RightValue);
+            sb.AppendLine("Do Left: " + DoLeft);
+
             return sb.ToString();
         }
     }

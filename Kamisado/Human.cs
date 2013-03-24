@@ -26,5 +26,10 @@ namespace Kamisado
 
             return new MoveInfo(ChosenMove, 0, 0);
         }
+
+        public MoveInfo GetMove(GameState currentState, int maxDepth)
+        {
+            return GetMove(currentState);
+        }
     }
 }

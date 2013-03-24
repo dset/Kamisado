@@ -21,7 +21,7 @@ namespace Kamisado
         {
             get
             {
-                return _piece.Position.Equals(_end);
+                return _start.Equals(_end);
             }
         }
 
@@ -46,13 +46,13 @@ namespace Kamisado
             _state = state;
             _piece = piece;
             _end = end;
+            _start = _piece.Position;
         }
 
         public GameState Execute()
         {
             _oldPieceToMove = _state.PieceToMove;
             _oldLastMove = _state.LastMove;
-            _start = _piece.Position;
 
             _state.BoardPositions[_start.Y][_start.X] = null;
             _state.BoardPositions[_end.Y][_end.X] = _piece;

@@ -10,5 +10,6 @@ namespace Kamisado
     {
         int Score { get; set; }
         MoveInfo GetMove(GameState currentState);
+        MoveInfo GetMove(GameState currentState, int maxDepth);
     }
 }

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Kamisado
 {
@@ -19,15 +20,38 @@ namespace Kamisado
         {
             Func<GameState, bool, double> evaluator = (currentState, imPlayerTwo) =>
                 {
-                    return NumPossibleMoves(currentState, imPlayerTwo) - NumPossibleMoves(currentState, !imPlayerTwo) +
-                    MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
                     //return 0;
+                    /*return NumPossibleColors(currentState, imPlayerTwo) - NumPossibleColors(currentState, !imPlayerTwo)
+                        + 6 * (PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo))
+                        + 4 * (MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo));*/
+                    return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
                 };
 
             IPlayer player1 = new Human();
-            IPlayer player2 = new Bot(3, evaluator);
+            IPlayer player2 = new Bot(7, evaluator);
 
-            GameEngine engine = new GameEngine(player1, player2, new GameState());
+            List<Piece> pieces = new List<Piece>();
+            pieces.Add(new Piece(false, new System.Drawing.Point(0, 7), PieceColor.Blue, 1));
+            pieces.Add(new Piece(false, new System.Drawing.Point(1, 7), PieceColor.Yellow, 0));
+            pieces.Add(new Piece(false, new System.Drawing.Point(2, 7), PieceColor.Brown, 1));
+            pieces.Add(new Piece(false, new System.Drawing.Point(3, 7), PieceColor.Pink, 0));
+            pieces.Add(new Piece(false, new System.Drawing.Point(4, 7), PieceColor.Green, 1));
+            pieces.Add(new Piece(false, new System.Drawing.Point(5, 7), PieceColor.Red, 0));
+            pieces.Add(new Piece(false, new System.Drawing.Point(6, 7), PieceColor.Orange, 1));
+            pieces.Add(new Piece(false, new System.Drawing.Point(7, 7), PieceColor.Purple, 3));
+
+            pieces.Add(new Piece(true, new System.Drawing.Point(0, 0), PieceColor.Yellow, 0));
+            pieces.Add(new Piece(true, new System.Drawing.Point(1, 0), PieceColor.Purple, 2));
+            pieces.Add(new Piece(true, new System.Drawing.Point(2, 0), PieceColor.Green, 1));
+            pieces.Add(new Piece(true, new System.Drawing.Point(3, 0), PieceColor.Orange, 0));
+            pieces.Add(new Piece(true, new System.Drawing.Point(4, 0), PieceColor.Red, 1));
+            pieces.Add(new Piece(true, new System.Drawing.Point(5, 0), PieceColor.Blue, 0));
+            pieces.Add(new Piece(true, new System.Drawing.Point(6, 0), PieceColor.Pink, 0));
+            pieces.Add(new Piece(true, new System.Drawing.Point(7, 0), PieceColor.Brown, 2));
+
+            GameState startState = new GameState(pieces, null);
+
+            GameEngine engine = new GameEngine(player1, player2, startState);
             GamePlayViewModel gpvm = new GamePlayViewModel(engine);
             
             engine.StateChanged += gpvm.OnGameStateChanged;
@@ -98,7 +122,42 @@ namespace Kamisado
                 }
             }
 
-            return ((double)score) / 48;
+            return ((double)score) / 48.0;
+        }
+
+        private static double BadToMoveUpAndDown(GameState currentState, bool imPlayerTwo)
+        {
+            double res = 0;
+            foreach (Piece myPiece in currentState.PiecePositions[imPlayerTwo ? 1 : 0])
+            {
+                List<IMove> moves = myPiece.GetPossibleMoves(currentState);
+                if (moves.Count == 1 && moves[0].IsTrivial)
+                {
+                    res -= 1;
+                }
+            }
+
+            return res / 8.0;
+        }
+
+        private static double NumPossibleColors(GameState currentState, bool imPlayerTwo)
+        {
+            double res = 0;
+            foreach (Piece myPiece in currentState.PiecePositions[imPlayerTwo ? 1 : 0])
+            {
+                int[] colorNumbers = new int[8];
+                foreach (IMove move in myPiece.GetPossibleMoves(currentState))
+                {
+                    colorNumbers[(int)Board.Tile[move.End.Y, move.End.X]]++;
+                }
+
+                for (int i = 0; i < colorNumbers.Length; i++)
+                {
+                    res += Math.Sign(colorNumbers[i]);
+                }
+            }
+
+            return res / 56.0;
         }
     }
 

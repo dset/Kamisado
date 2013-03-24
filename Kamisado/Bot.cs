@@ -37,6 +37,8 @@ namespace Kamisado
                 moves[move].Execute();
                 moveValues[move] = Min(currentState, 1, Double.MinValue, Double.MaxValue);
                 moves[move].Reverse();
+
+                //Debug.WriteLine("Move " + moves[move] + " had value " + moveValues[move]);
             }
 
             double bestValue = moveValues[0];
@@ -57,9 +59,39 @@ namespace Kamisado
                 }
             }
 
+            /*
+            MoveInfo[] moveInfos = new MoveInfo[moves.Length];
+            for (int i = 0; i < moves.Length; i++)
+            {
+                moveInfos[i] = new MoveInfo(moves[i], moveValues[i], -1);
+            }
+
+            Array.Sort(moveInfos, (MoveInfo mi1, MoveInfo mi2) =>
+            {
+                return Math.Sign(mi1.Value - mi2.Value);
+            });*/
+
+
+            /*Debug.WriteLine("Sorterad: ");
+            for (int i = 0; i < moveInfos.Length; i++)
+            {
+                MoveInfo mi = moveInfos[i];
+                Debug.WriteLine("Move " + mi.Move + " had value " + mi.Value);
+            }*/
+
             bestMoves.Shuffle();
+            Debug.WriteLine("Längden är " + bestMoves.Count);
 
             return new MoveInfo(bestMoves[0], bestValue, -1);
+        }
+
+        public MoveInfo GetMove(GameState currentState, int maxDepth)
+        {
+            int cachedMaxDepth = _maxDepth;
+            _maxDepth = maxDepth;
+            MoveInfo res = GetMove(currentState);
+            _maxDepth = cachedMaxDepth;
+            return res;
         }
 
         /*public MoveInfo GetMove(GameState currentState)
@@ -154,6 +186,7 @@ namespace Kamisado
             else
             {
                 lastRowHighestValueIndices.Shuffle();
+                Debug.WriteLine("Detta är längden " + lastRowHighestValueIndices.Count);
                 return new MoveInfo(moves[lastRowHighestValueIndices[0]], lastRowHighestValue, _maxDepth);
             }
         }*/
@@ -228,11 +261,13 @@ namespace Kamisado
         {
             if (gs.PlayerTwoWinning.HasValue && ((gs.PlayerTwoWinning.Value && _imPlayerTwo) || (!gs.PlayerTwoWinning.Value && !_imPlayerTwo)))
             {
-                return Double.MaxValue - 3 + gs.WinningPiece.Sumoness;
+                //return Double.MaxValue - 3 + gs.WinningPiece.Sumoness;
+                return Double.MaxValue / (Math.Pow(10, 3 - gs.WinningPiece.Sumoness));
             }
             else if (gs.PlayerTwoWinning.HasValue)
             {
-                return Double.MinValue + 3 - gs.WinningPiece.Sumoness;
+                //return Double.MinValue + 3 - gs.WinningPiece.Sumoness;
+                return Double.MinValue / (Math.Pow(10, 3 - gs.WinningPiece.Sumoness));
             }
 
             return _evaluate(gs, _imPlayerTwo);
