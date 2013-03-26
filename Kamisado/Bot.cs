@@ -152,6 +152,36 @@ namespace Kamisado
             return res;
         }
 
+        public double[] GetMoveValues(GameState currentState)
+        {
+            _imPlayerTwo = currentState.IsPlayerTwo;
+
+            List<IMove> possibleMoves = currentState.PossibleMoves;
+
+            IMove[] moves = new IMove[possibleMoves.Count];
+            possibleMoves.CopyTo(moves, 0);
+
+            double[] moveValues = new double[moves.Length];
+
+            for (int move = 0; move < moves.Length; move++)
+            {
+                moves[move].Execute();
+                moveValues[move] = Min(currentState, 1, Double.MinValue, Double.MaxValue);
+                moves[move].Reverse();
+            }
+
+            return moveValues;
+        }
+
+        public double[] GetMoveValues(GameState currentState, int maxDepth)
+        {
+            int cachedMaxDepth = _maxDepth;
+            _maxDepth = maxDepth;
+            double[] res = GetMoveValues(currentState);
+            _maxDepth = cachedMaxDepth;
+            return res;
+        }
+
         /*public MoveInfo GetMove(GameState currentState)
         {
             _imPlayerTwo = currentState.IsPlayerTwo;

@@ -9,7 +9,7 @@ namespace Kamisado
     public class MoveInfo
     {
         public IMove Move { get; private set; }
-        public double Value { get; private set; }
+        public double Value { get; set; }
         public int Depth { get; private set; }
 
         public MoveInfo(IMove move, double value, int depth)

@@ -18,17 +18,40 @@ namespace Kamisado
     {
         public void App_Startup(object sender, StartupEventArgs e)
         {
-            Func<GameState, bool, double> evaluator = (currentState, imPlayerTwo) =>
-                {
-                    //return 0;
-                    /*return NumPossibleColors(currentState, imPlayerTwo) - NumPossibleColors(currentState, !imPlayerTwo)
-                        + 6 * (PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo))
-                        + 4 * (MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo));*/
-                    return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
-                };
+            Func<GameState, bool, double> moveFarEval = (currentState, imPlayerTwo) =>
+            {
+                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
+            };
 
-            IPlayer player1 = new Bot(10, evaluator, 6);
-            IPlayer player2 = new Human();
+            Func<GameState, bool, double> piecesInStrikingEval = (currentState, imPlayerTwo) =>
+            {
+                return PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
+            };
+
+            Func<GameState, bool, double> numPossibleMovesEval = (currentState, imPlayerTwo) =>
+            {
+                return NumPossibleMoves(currentState, imPlayerTwo) - NumPossibleMoves(currentState, !imPlayerTwo);
+            };
+
+            Func<GameState, bool, double> numPossibleColorsEval = (currentState, imPlayerTwo) =>
+            {
+                return NumPossibleColors(currentState, imPlayerTwo) - NumPossibleColors(currentState, !imPlayerTwo);
+            };
+
+            IPlayer player1 = new Human();
+
+            Bot[] bots = new Bot[4];
+            bots[0] = new Bot(5, moveFarEval);
+            bots[1] = new Bot(5, piecesInStrikingEval);
+            bots[2] = new Bot(5, numPossibleMovesEval);
+            bots[3] = new Bot(5, numPossibleColorsEval);
+
+            double[] weights = new double[4];
+            weights[0] = 1;
+            weights[1] = 1;
+            weights[2] = 1;
+            weights[3] = 1;
+            IPlayer player2 = new CompositeBot(bots, weights);
 
             List<Piece> pieces = new List<Piece>();
             pieces.Add(new Piece(false, new System.Drawing.Point(0, 7), PieceColor.Blue, 1));
@@ -93,7 +116,7 @@ namespace Kamisado
                 }
             }
 
-            return ((double)numStriking) / 8.0;
+            return ((double)numStriking) / 24.0;
         }
 
         private static double NumPossibleMoves(GameState currentState, bool imPlayerTwo)

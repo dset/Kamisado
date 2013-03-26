@@ -16,101 +16,44 @@ namespace HeuristicComparer
 
         static void Main(string[] args)
         {
-            Bot player1 = new Bot(5, (currentState, imPlayerTwo) =>
+            Func<GameState, bool, double> moveFarEval = (currentState, imPlayerTwo) =>
             {
                 return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
-            });
-            string player1Description = "depth 5, 1, 1, MoveFar";
+            };
 
-            Bot player2 = new Bot(6, (currentState, imPlayerTwo) =>
-            {
-                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
-            }, 4);
-            string player2Description = "depth 6, 1, 1, MoveFar, Cut width 4";
-
-            Compare(player1, player1Description, player2, player2Description, "511_MoveFar_vs_611_c4_MoveFar");
-
-
-            Bot player3 = new Bot(5, (currentState, imPlayerTwo) =>
-            {
-                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
-            });
-            string player3Description = "depth 5, 1, 1, MoveFar";
-
-            Bot player4 = new Bot(8, (currentState, imPlayerTwo) =>
-            {
-                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
-            }, 3);
-            string player4Description = "depth 8, 1, 1, MoveFar, Cut width 3";
-
-            Compare(player3, player3Description, player4, player4Description, "511_MoveFar_vs_811_c3_MoveFar");
-
-
-
-            Bot player5 = new Bot(5, (currentState, imPlayerTwo) =>
-            {
-                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
-            });
-            string player5Description = "depth 5, 1, 1, MoveFar";
-
-            Bot player6 = new Bot(15, (currentState, imPlayerTwo) =>
-            {
-                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
-            }, 2);
-            string player6Description = "depth 15, 1, 1, MoveFar, Cut width 2";
-
-            Compare(player5, player5Description, player6, player6Description, "511_MoveFar_vs_1511_c2_MoveFar");
-
-
-
-
-            Bot player7 = new Bot(5, (currentState, imPlayerTwo) =>
+            Func<GameState, bool, double> piecesInStrikingEval = (currentState, imPlayerTwo) =>
             {
                 return PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
-            });
-            string player7Description = "depth 5, 1, 1, PiecesInStriking";
+            };
 
-            Bot player8 = new Bot(6, (currentState, imPlayerTwo) =>
+            Func<GameState, bool, double> numPossibleMovesEval = (currentState, imPlayerTwo) =>
             {
-                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
-            }, 4);
-            string player8Description = "depth 6, 1, 1, MoveFar, Cut width 4";
+                return NumPossibleMoves(currentState, imPlayerTwo) - NumPossibleMoves(currentState, !imPlayerTwo);
+            };
 
-            Compare(player7, player7Description, player8, player8Description, "511_PiecesInStriking_vs_611_c4_MoveFar");
-
-
-            Bot player9 = new Bot(5, (currentState, imPlayerTwo) =>
+            Func<GameState, bool, double> numPossibleColorsEval = (currentState, imPlayerTwo) =>
             {
-                return PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
-            });
-            string player9Description = "depth 5, 1, 1, PiecesInStriking";
+                return NumPossibleColors(currentState, imPlayerTwo) - NumPossibleColors(currentState, !imPlayerTwo);
+            };
 
-            Bot player10 = new Bot(8, (currentState, imPlayerTwo) =>
-            {
-                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
-            }, 3);
-            string player10Description = "depth 8, 1, 1, MoveFar, Cut width 3";
+            Bot player1 = new Bot(5, moveFarEval);
+            string player1Description = "depth 5, MoveFar";
 
-            Compare(player9, player9Description, player10, player10Description, "511_PiecesInStriking_vs_811_c3_MoveFar");
+            Bot[] comp = new Bot[2];
+            comp[0] = new Bot(5, moveFarEval);
+            comp[1] = new Bot(5, piecesInStrikingEval);
 
+            double[] weights = new double[2];
+            weights[0] = 1;
+            weights[1] = 1;
 
+            CompositeBot player2 = new CompositeBot(comp, weights);
+            string player2Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
 
-            Bot player11 = new Bot(5, (currentState, imPlayerTwo) =>
-            {
-                return PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
-            });
-            string player11Description = "depth 5, 1, 1, PiecesInStriking";
-
-            Bot player12 = new Bot(15, (currentState, imPlayerTwo) =>
-            {
-                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
-            }, 2);
-            string player12Description = "depth 15, 1, 1, MoveFar, Cut width 2";
-
-            Compare(player11, player11Description, player12, player12Description, "511_PiecesInStriking_vs_1511_c2_MoveFar");
+            Compare(player1, player1Description, player2, player2Description, "5_MoveFar_vs_5_1MoveFar_1PiecesInStriking");
         }
 
-        private static void Compare(Bot player1, string player1Description, Bot player2, string player2Description, string dir)
+        private static void Compare(IPlayer player1, string player1Description, IPlayer player2, string player2Description, string dir)
         {
             string dirname = dir;
             string path = @"C:\Users\Dan\Documents\Visual Studio 2012\Projects\Kamisado\HeuristicComparer\bin\Debug\" + dirname + @"\";
