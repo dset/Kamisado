@@ -11,88 +11,103 @@ namespace HeuristicComparer
 {
     class Program
     {
-        private const int NUM_MATCHES = 4;
+        private const int NUM_MATCHES = 20;
         private const int WIN_SCORE = 15;
 
         static void Main(string[] args)
         {
-            Bot player3 = new Bot(3, (currentState, imPlayerTwo) =>
+            Bot player1 = new Bot(5, (currentState, imPlayerTwo) =>
             {
                 return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
             });
-            string player3Description = "depth 3, 1, 1, MoveFar";
+            string player1Description = "depth 5, 1, 1, MoveFar";
 
-            Bot player4 = new Bot(3, (currentState, imPlayerTwo) =>
+            Bot player2 = new Bot(6, (currentState, imPlayerTwo) =>
             {
-                return MoveFar(currentState, imPlayerTwo);
-            });
-            string player4Description = "depth 3, 1, 0, MoveFar";
+                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
+            }, 4);
+            string player2Description = "depth 6, 1, 1, MoveFar, Cut width 4";
 
-            Compare(player3, player3Description, player4, player4Description, "311vs310_MoveFar");
-
-
-
-            /*Bot player5 = new Bot(7, (currentState, imPlayerTwo) =>
-            {
-                return NumPossibleColors(currentState, imPlayerTwo) - NumPossibleColors(currentState, !imPlayerTwo);
-            });
-            string player5Description = "depth 7, 1, 1, NumPossibleColors";
-
-            Bot player6 = new Bot(7, (currentState, imPlayerTwo) =>
-            {
-                return 2 * NumPossibleColors(currentState, imPlayerTwo) - NumPossibleColors(currentState, !imPlayerTwo);
-            });
-            string player6Description = "depth 7, 2, 1, NumPossibleColors";
-
-            Compare(player5, player5Description, player6, player6Description, "711vs721_NumPossibleColors");
+            Compare(player1, player1Description, player2, player2Description, "511_MoveFar_vs_611_c4_MoveFar");
 
 
-
-            Bot player7 = new Bot(7, (currentState, imPlayerTwo) =>
-            {
-                return NumPossibleColors(currentState, imPlayerTwo) - NumPossibleColors(currentState, !imPlayerTwo);
-            });
-            string player7Description = "depth 7, 1, 1, NumPossibleColors";
-
-            Bot player8 = new Bot(7, (currentState, imPlayerTwo) =>
-            {
-                return NumPossibleColors(currentState, imPlayerTwo) - 2 * NumPossibleColors(currentState, !imPlayerTwo);
-            });
-            string player8Description = "depth 7, 1, 2, NumPossibleColors";
-
-            Compare(player7, player7Description, player8, player8Description, "711vs712_NumPossibleColors");
-
-
-
-            Bot player9 = new Bot(7, (currentState, imPlayerTwo) =>
-            {
-                return NumPossibleColors(currentState, imPlayerTwo) - NumPossibleColors(currentState, !imPlayerTwo);
-            });
-            string player9Description = "depth 7, 1, 1, NumPossibleColors";
-
-            Bot player10 = new Bot(7, (currentState, imPlayerTwo) =>
-            {
-                return NumPossibleMoves(currentState, imPlayerTwo) - NumPossibleMoves(currentState, !imPlayerTwo);
-            });
-            string player10Description = "depth 7, 1, 1, NumPossibleMoves";
-
-            Compare(player9, player9Description, player10, player10Description, "711_NumPossibleColors_vs_711_NumPossibleMoves");
-
-
-
-            Bot player11 = new Bot(7, (currentState, imPlayerTwo) =>
-            {
-                return NumPossibleColors(currentState, imPlayerTwo) - NumPossibleColors(currentState, !imPlayerTwo);
-            });
-            string player11Description = "depth 7, 1, 1, NumPossibleColors";
-
-            Bot player12 = new Bot(7, (currentState, imPlayerTwo) =>
+            Bot player3 = new Bot(5, (currentState, imPlayerTwo) =>
             {
                 return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
             });
-            string player12Description = "depth 7, 1, 1, MoveFar";
+            string player3Description = "depth 5, 1, 1, MoveFar";
 
-            Compare(player11, player11Description, player12, player12Description, "711_NumPossibleColors_vs_711_MoveFar");*/
+            Bot player4 = new Bot(8, (currentState, imPlayerTwo) =>
+            {
+                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
+            }, 3);
+            string player4Description = "depth 8, 1, 1, MoveFar, Cut width 3";
+
+            Compare(player3, player3Description, player4, player4Description, "511_MoveFar_vs_811_c3_MoveFar");
+
+
+
+            Bot player5 = new Bot(5, (currentState, imPlayerTwo) =>
+            {
+                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
+            });
+            string player5Description = "depth 5, 1, 1, MoveFar";
+
+            Bot player6 = new Bot(15, (currentState, imPlayerTwo) =>
+            {
+                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
+            }, 2);
+            string player6Description = "depth 15, 1, 1, MoveFar, Cut width 2";
+
+            Compare(player5, player5Description, player6, player6Description, "511_MoveFar_vs_1511_c2_MoveFar");
+
+
+
+
+            Bot player7 = new Bot(5, (currentState, imPlayerTwo) =>
+            {
+                return PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
+            });
+            string player7Description = "depth 5, 1, 1, PiecesInStriking";
+
+            Bot player8 = new Bot(6, (currentState, imPlayerTwo) =>
+            {
+                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
+            }, 4);
+            string player8Description = "depth 6, 1, 1, MoveFar, Cut width 4";
+
+            Compare(player7, player7Description, player8, player8Description, "511_PiecesInStriking_vs_611_c4_MoveFar");
+
+
+            Bot player9 = new Bot(5, (currentState, imPlayerTwo) =>
+            {
+                return PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
+            });
+            string player9Description = "depth 5, 1, 1, PiecesInStriking";
+
+            Bot player10 = new Bot(8, (currentState, imPlayerTwo) =>
+            {
+                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
+            }, 3);
+            string player10Description = "depth 8, 1, 1, MoveFar, Cut width 3";
+
+            Compare(player9, player9Description, player10, player10Description, "511_PiecesInStriking_vs_811_c3_MoveFar");
+
+
+
+            Bot player11 = new Bot(5, (currentState, imPlayerTwo) =>
+            {
+                return PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
+            });
+            string player11Description = "depth 5, 1, 1, PiecesInStriking";
+
+            Bot player12 = new Bot(15, (currentState, imPlayerTwo) =>
+            {
+                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
+            }, 2);
+            string player12Description = "depth 15, 1, 1, MoveFar, Cut width 2";
+
+            Compare(player11, player11Description, player12, player12Description, "511_PiecesInStriking_vs_1511_c2_MoveFar");
         }
 
         private static void Compare(Bot player1, string player1Description, Bot player2, string player2Description, string dir)

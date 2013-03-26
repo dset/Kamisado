@@ -27,8 +27,8 @@ namespace Kamisado
                     return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
                 };
 
-            IPlayer player1 = new Human();
-            IPlayer player2 = new Bot(7, evaluator);
+            IPlayer player1 = new Bot(10, evaluator, 6);
+            IPlayer player2 = new Human();
 
             List<Piece> pieces = new List<Piece>();
             pieces.Add(new Piece(false, new System.Drawing.Point(0, 7), PieceColor.Blue, 1));
@@ -51,7 +51,7 @@ namespace Kamisado
 
             GameState startState = new GameState(pieces, null);
 
-            GameEngine engine = new GameEngine(player1, player2, startState);
+            GameEngine engine = new GameEngine(player1, player2, new GameState());
             GamePlayViewModel gpvm = new GamePlayViewModel(engine);
             
             engine.StateChanged += gpvm.OnGameStateChanged;
