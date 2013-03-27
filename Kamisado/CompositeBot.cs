@@ -45,6 +45,7 @@ namespace Kamisado
                 {
                     moveValues = _bots[i].GetMoveValues(currentState, maxDepth);
                 }
+
                 moveInfos[i] = new MoveInfo[moveValues.Length];
                 for (int j = 0; j < moveValues.Length; j++)
                 {
@@ -145,7 +146,7 @@ namespace Kamisado
             }
 
             // Combine values
-            int highestCombinedIndex = -1;
+            List<int> highestCombinedIndeces = new List<int>();
             double highestCombined = Double.MinValue;
             double[] combinedMoveValues = new double[moves.Length];
             for (int i = 0; i < combinedMoveValues.Length; i++)
@@ -166,18 +167,18 @@ namespace Kamisado
                 if (combinedMoveValues[i] > highestCombined)
                 {
                     highestCombined = combinedMoveValues[i];
-                    highestCombinedIndex = i;
+                    highestCombinedIndeces = new List<int>();
+                    highestCombinedIndeces.Add(i);
+                }
+                else if (combinedMoveValues[i] == highestCombined)
+                {
+                    highestCombinedIndeces.Add(i);
                 }
             }
 
-            Debug.Write("Combined: ");
-            for (int i = 0; i < combinedMoveValues.Length; i++)
-            {
-                Debug.Write(combinedMoveValues[i] + ", ");
-            }
-            Debug.WriteLine("");
+            highestCombinedIndeces.Shuffle();
 
-            return new MoveInfo(moves[highestCombinedIndex], highestCombined, -1);
+            return new MoveInfo(moves[highestCombinedIndeces[0]], highestCombined, -1);
         }
     }
 }

@@ -290,8 +290,26 @@ namespace Kamisado
             }
         }
 
-        public GameState(List<Piece> pieces, Piece pieceToMove)
+        public GameState(List<Piece> ps, Piece pToMove)
         {
+            List<Piece> pieces = new List<Piece>();
+            Piece pieceToMove = null;
+            foreach (Piece p in ps)
+            {
+                pieces.Add(p.Copy());
+            }
+            if (pToMove != null)
+            {
+                foreach (Piece p in pieces)
+                {
+                    if (p.Position.Equals(pToMove.Position))
+                    {
+                        pieceToMove = p;
+                        break;
+                    }
+                }
+            }
+
             if (pieceToMove == null)
             {
                 IsPlayerTwo = false;

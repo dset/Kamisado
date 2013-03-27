@@ -14,17 +14,27 @@ namespace IterativeDeepening
 
         static void Main(string[] args)
         {
-            GameState gs = new GameState();
-            List<IMove> tmp = gs.PossibleMoves;
-            List<IMove> possibleMoves = new List<IMove>();
+            List<Piece> pieces = new List<Piece>();
+            pieces.Add(new Piece(false, new System.Drawing.Point(0, 7), PieceColor.Blue, 1));
+            pieces.Add(new Piece(false, new System.Drawing.Point(1, 7), PieceColor.Yellow, 0));
+            pieces.Add(new Piece(false, new System.Drawing.Point(2, 7), PieceColor.Brown, 1));
+            pieces.Add(new Piece(false, new System.Drawing.Point(3, 7), PieceColor.Pink, 0));
+            pieces.Add(new Piece(false, new System.Drawing.Point(4, 7), PieceColor.Green, 1));
+            pieces.Add(new Piece(false, new System.Drawing.Point(5, 7), PieceColor.Red, 0));
+            pieces.Add(new Piece(false, new System.Drawing.Point(6, 7), PieceColor.Orange, 1));
+            pieces.Add(new Piece(false, new System.Drawing.Point(7, 7), PieceColor.Purple, 3));
 
-            foreach (IMove m in tmp)
-            {
-                if (m.Piece.Position.X < 4)
-                {
-                    possibleMoves.Add(m);
-                }
-            }
+            pieces.Add(new Piece(true, new System.Drawing.Point(0, 0), PieceColor.Yellow, 0));
+            pieces.Add(new Piece(true, new System.Drawing.Point(1, 0), PieceColor.Purple, 2));
+            pieces.Add(new Piece(true, new System.Drawing.Point(2, 0), PieceColor.Green, 1));
+            pieces.Add(new Piece(true, new System.Drawing.Point(3, 0), PieceColor.Orange, 0));
+            pieces.Add(new Piece(true, new System.Drawing.Point(4, 0), PieceColor.Red, 1));
+            pieces.Add(new Piece(true, new System.Drawing.Point(5, 0), PieceColor.Blue, 0));
+            pieces.Add(new Piece(true, new System.Drawing.Point(6, 0), PieceColor.Pink, 0));
+            pieces.Add(new Piece(true, new System.Drawing.Point(7, 0), PieceColor.Brown, 2));
+
+            GameState startState = new GameState(pieces, null);
+            List<IMove> possibleMoves = startState.PossibleMoves;
 
             possibleMoves.Sort(new Comparison<IMove>((IMove m1, IMove m2) =>
             {
@@ -36,9 +46,9 @@ namespace IterativeDeepening
                 System.IO.File.AppendAllText(@"C:\Users\Dan\Documents\Visual Studio 2012\Projects\Kamisado\IterativeDeepening\bin\Debug\Output.txt", "Starting move " + move + Environment.NewLine);
                 Console.WriteLine("Starting move " + move);
 
-                for (int depth = 1; depth <= 30; depth++)
+                for (int depth = 1; depth <= 20; depth++)
                 {
-                    GameState smallState = new GameState();
+                    GameState smallState = new GameState(pieces, null);
                     smallState.PossibleMoves = new List<IMove>();
                     smallState.PossibleMoves.Add(new Move(smallState, smallState.PiecePositions[move.Piece.BelongsToPlayerTwo ? 1 : 0][(int)move.Piece.Color],
                         new Point(move.End.X, move.End.Y)));

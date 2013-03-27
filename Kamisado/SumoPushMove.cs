@@ -77,7 +77,7 @@ namespace Kamisado
             _state.LastMove = this;
 
             List<IMove> possible = new List<IMove>();
-            possible.Add(new Move(_state, currentPiece, currentPiece.Position));
+            possible.Add(new SumoDazedMove(_state, currentPiece));
             _state.PossibleMoves = possible;
 
             return _state;

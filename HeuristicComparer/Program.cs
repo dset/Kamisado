@@ -14,31 +14,38 @@ namespace HeuristicComparer
         private const int NUM_MATCHES = 20;
         private const int WIN_SCORE = 15;
 
+        static Func<GameState, bool, double> moveFarEval = (currentState, imPlayerTwo) =>
+        {
+            return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
+        };
+
+        static Func<GameState, bool, double> piecesInStrikingEval = (currentState, imPlayerTwo) =>
+        {
+            return PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
+        };
+
+        static Func<GameState, bool, double> numPossibleMovesEval = (currentState, imPlayerTwo) =>
+        {
+            return NumPossibleMoves(currentState, imPlayerTwo) - NumPossibleMoves(currentState, !imPlayerTwo);
+        };
+
+        static Func<GameState, bool, double> numPossibleColorsEval = (currentState, imPlayerTwo) =>
+        {
+            return NumPossibleColors(currentState, imPlayerTwo) - NumPossibleColors(currentState, !imPlayerTwo);
+        };
+
         static void Main(string[] args)
         {
-            Func<GameState, bool, double> moveFarEval = (currentState, imPlayerTwo) =>
-            {
-                return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
-            };
+            Match1();
+            Match2();
+            Match3();
+            Match4();
+            Match5();
+            Match6();
+        }
 
-            Func<GameState, bool, double> piecesInStrikingEval = (currentState, imPlayerTwo) =>
-            {
-                return PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
-            };
-
-            Func<GameState, bool, double> numPossibleMovesEval = (currentState, imPlayerTwo) =>
-            {
-                return NumPossibleMoves(currentState, imPlayerTwo) - NumPossibleMoves(currentState, !imPlayerTwo);
-            };
-
-            Func<GameState, bool, double> numPossibleColorsEval = (currentState, imPlayerTwo) =>
-            {
-                return NumPossibleColors(currentState, imPlayerTwo) - NumPossibleColors(currentState, !imPlayerTwo);
-            };
-
-            Bot player1 = new Bot(5, moveFarEval);
-            string player1Description = "depth 5, MoveFar";
-
+        static void Match1()
+        {
             Bot[] comp = new Bot[2];
             comp[0] = new Bot(5, moveFarEval);
             comp[1] = new Bot(5, piecesInStrikingEval);
@@ -47,10 +54,132 @@ namespace HeuristicComparer
             weights[0] = 1;
             weights[1] = 1;
 
-            CompositeBot player2 = new CompositeBot(comp, weights);
-            string player2Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
+            CompositeBot player1 = new CompositeBot(comp, weights);
+            string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
 
-            Compare(player1, player1Description, player2, player2Description, "5_MoveFar_vs_5_1MoveFar_1PiecesInStriking");
+            Bot player2 = new Bot(5, moveFarEval);
+            string player2Description = "depth 5, MoveFar";
+
+            Compare(player1, player1Description, player2, player2Description, "5_1MoveFar_1PiecesInStriking_vs_5_MoveFar");
+        }
+
+        static void Match2()
+        {
+            Bot[] comp = new Bot[2];
+            comp[0] = new Bot(5, moveFarEval);
+            comp[1] = new Bot(5, piecesInStrikingEval);
+
+            double[] weights = new double[2];
+            weights[0] = 1;
+            weights[1] = 1;
+
+            CompositeBot player1 = new CompositeBot(comp, weights);
+            string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
+
+            Bot player2 = new Bot(5, piecesInStrikingEval);
+            string player2Description = "depth 5, PiecesInStriking";
+
+            Compare(player1, player1Description, player2, player2Description, "5_1MoveFar_1PiecesInStriking_vs_5_PiecesInStriking");
+        }
+
+        static void Match3()
+        {
+            Bot[] comp = new Bot[2];
+            comp[0] = new Bot(5, moveFarEval);
+            comp[1] = new Bot(5, piecesInStrikingEval);
+
+            double[] weights = new double[2];
+            weights[0] = 1;
+            weights[1] = 1;
+
+            CompositeBot player1 = new CompositeBot(comp, weights);
+            string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
+
+            Bot player2 = new Bot(5, numPossibleMovesEval);
+            string player2Description = "depth 5, NumPossibleMoves";
+
+            Compare(player1, player1Description, player2, player2Description, "5_1MoveFar_1PiecesInStriking_vs_5_NumPossibleMoves");
+        }
+
+        static void Match4()
+        {
+            Bot[] comp = new Bot[2];
+            comp[0] = new Bot(5, moveFarEval);
+            comp[1] = new Bot(5, piecesInStrikingEval);
+
+            double[] weights = new double[2];
+            weights[0] = 1;
+            weights[1] = 1;
+
+            CompositeBot player1 = new CompositeBot(comp, weights);
+            string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
+
+            Bot[] comp2 = new Bot[2];
+            comp2[0] = new Bot(5, moveFarEval);
+            comp2[1] = new Bot(5, piecesInStrikingEval);
+
+            double[] weights2 = new double[2];
+            weights2[0] = 2;
+            weights2[1] = 1;
+
+            CompositeBot player2 = new CompositeBot(comp2, weights2);
+            string player2Description = "depth 5, 2 MoveFar, 1 PiecesInStriking";
+
+            Compare(player1, player1Description, player2, player2Description, "5_1MoveFar_1PiecesInStriking_vs_5_2MoveFar_1PiecesInStriking");
+        }
+
+        static void Match5()
+        {
+            Bot[] comp = new Bot[2];
+            comp[0] = new Bot(5, moveFarEval);
+            comp[1] = new Bot(5, piecesInStrikingEval);
+
+            double[] weights = new double[2];
+            weights[0] = 1;
+            weights[1] = 1;
+
+            CompositeBot player1 = new CompositeBot(comp, weights);
+            string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
+
+            Bot[] comp2 = new Bot[2];
+            comp2[0] = new Bot(5, moveFarEval);
+            comp2[1] = new Bot(5, piecesInStrikingEval);
+
+            double[] weights2 = new double[2];
+            weights2[0] = 1;
+            weights2[1] = 2;
+
+            CompositeBot player2 = new CompositeBot(comp2, weights2);
+            string player2Description = "depth 5, 1 MoveFar, 2 PiecesInStriking";
+
+            Compare(player1, player1Description, player2, player2Description, "5_1MoveFar_1PiecesInStriking_vs_5_1MoveFar_2PiecesInStriking");
+        }
+
+        static void Match6()
+        {
+            Bot[] comp = new Bot[2];
+            comp[0] = new Bot(5, moveFarEval);
+            comp[1] = new Bot(5, piecesInStrikingEval);
+
+            double[] weights = new double[2];
+            weights[0] = 1;
+            weights[1] = 1;
+
+            CompositeBot player1 = new CompositeBot(comp, weights);
+            string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
+
+            Bot[] comp2 = new Bot[2];
+            comp2[0] = new Bot(5, moveFarEval);
+            comp2[1] = new Bot(5, piecesInStrikingEval);
+
+            double[] weights2 = new double[2];
+            weights2[0] = 1;
+            weights2[1] = 3;
+
+            CompositeBot player2 = new CompositeBot(comp2, weights2);
+            string player2Description = "depth 5, 1 MoveFar, 3 PiecesInStriking";
+
+            Compare(player1, player1Description, player2, player2Description, "5_1MoveFar_1PiecesInStriking_vs_5_1MoveFar_3PiecesInStriking");
         }
 
         private static void Compare(IPlayer player1, string player1Description, IPlayer player2, string player2Description, string dir)

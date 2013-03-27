@@ -40,17 +40,17 @@ namespace Kamisado
 
             IPlayer player1 = new Human();
 
-            Bot[] bots = new Bot[4];
-            bots[0] = new Bot(5, moveFarEval);
-            bots[1] = new Bot(5, piecesInStrikingEval);
+            Bot[] bots = new Bot[3];
+            bots[0] = new Bot(5, piecesInStrikingEval);
+            bots[1] = new Bot(5, moveFarEval);
             bots[2] = new Bot(5, numPossibleMovesEval);
-            bots[3] = new Bot(5, numPossibleColorsEval);
+            //bots[3] = new Bot(5, numPossibleColorsEval);
 
-            double[] weights = new double[4];
+            double[] weights = new double[3];
             weights[0] = 1;
             weights[1] = 1;
             weights[2] = 1;
-            weights[3] = 1;
+            //weights[3] = 1;
             IPlayer player2 = new CompositeBot(bots, weights);
 
             List<Piece> pieces = new List<Piece>();
