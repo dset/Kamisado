@@ -9,30 +9,10 @@ using Kamisado;
 
 namespace HeuristicComparer
 {
-    class Program
+    public class Program
     {
         private const int NUM_MATCHES = 20;
         private const int WIN_SCORE = 15;
-
-        static Func<GameState, bool, double> moveFarEval = (currentState, imPlayerTwo) =>
-        {
-            return MoveFar(currentState, imPlayerTwo) - MoveFar(currentState, !imPlayerTwo);
-        };
-
-        static Func<GameState, bool, double> piecesInStrikingEval = (currentState, imPlayerTwo) =>
-        {
-            return PiecesInStriking(currentState, imPlayerTwo) - PiecesInStriking(currentState, !imPlayerTwo);
-        };
-
-        static Func<GameState, bool, double> numPossibleMovesEval = (currentState, imPlayerTwo) =>
-        {
-            return NumPossibleMoves(currentState, imPlayerTwo) - NumPossibleMoves(currentState, !imPlayerTwo);
-        };
-
-        static Func<GameState, bool, double> numPossibleColorsEval = (currentState, imPlayerTwo) =>
-        {
-            return NumPossibleColors(currentState, imPlayerTwo) - NumPossibleColors(currentState, !imPlayerTwo);
-        };
 
         static void Main(string[] args)
         {
@@ -42,13 +22,16 @@ namespace HeuristicComparer
             Match4();
             Match5();
             Match6();
+            Match7();
+            Match8();
+            Match9();
         }
 
         static void Match1()
         {
             Bot[] comp = new Bot[2];
-            comp[0] = new Bot(5, moveFarEval);
-            comp[1] = new Bot(5, piecesInStrikingEval);
+            comp[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
 
             double[] weights = new double[2];
             weights[0] = 1;
@@ -57,7 +40,7 @@ namespace HeuristicComparer
             CompositeBot player1 = new CompositeBot(comp, weights);
             string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
 
-            Bot player2 = new Bot(5, moveFarEval);
+            Bot player2 = new Bot(5, Heuristics.MoveFarEval);
             string player2Description = "depth 5, MoveFar";
 
             Compare(player1, player1Description, player2, player2Description, "5_1MoveFar_1PiecesInStriking_vs_5_MoveFar");
@@ -66,8 +49,8 @@ namespace HeuristicComparer
         static void Match2()
         {
             Bot[] comp = new Bot[2];
-            comp[0] = new Bot(5, moveFarEval);
-            comp[1] = new Bot(5, piecesInStrikingEval);
+            comp[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
 
             double[] weights = new double[2];
             weights[0] = 1;
@@ -76,7 +59,7 @@ namespace HeuristicComparer
             CompositeBot player1 = new CompositeBot(comp, weights);
             string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
 
-            Bot player2 = new Bot(5, piecesInStrikingEval);
+            Bot player2 = new Bot(5, Heuristics.PiecesInStrikingEval);
             string player2Description = "depth 5, PiecesInStriking";
 
             Compare(player1, player1Description, player2, player2Description, "5_1MoveFar_1PiecesInStriking_vs_5_PiecesInStriking");
@@ -85,8 +68,8 @@ namespace HeuristicComparer
         static void Match3()
         {
             Bot[] comp = new Bot[2];
-            comp[0] = new Bot(5, moveFarEval);
-            comp[1] = new Bot(5, piecesInStrikingEval);
+            comp[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
 
             double[] weights = new double[2];
             weights[0] = 1;
@@ -95,7 +78,7 @@ namespace HeuristicComparer
             CompositeBot player1 = new CompositeBot(comp, weights);
             string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
 
-            Bot player2 = new Bot(5, numPossibleMovesEval);
+            Bot player2 = new Bot(5, Heuristics.NumPossibleMovesEval);
             string player2Description = "depth 5, NumPossibleMoves";
 
             Compare(player1, player1Description, player2, player2Description, "5_1MoveFar_1PiecesInStriking_vs_5_NumPossibleMoves");
@@ -104,8 +87,8 @@ namespace HeuristicComparer
         static void Match4()
         {
             Bot[] comp = new Bot[2];
-            comp[0] = new Bot(5, moveFarEval);
-            comp[1] = new Bot(5, piecesInStrikingEval);
+            comp[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
 
             double[] weights = new double[2];
             weights[0] = 1;
@@ -115,8 +98,8 @@ namespace HeuristicComparer
             string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
 
             Bot[] comp2 = new Bot[2];
-            comp2[0] = new Bot(5, moveFarEval);
-            comp2[1] = new Bot(5, piecesInStrikingEval);
+            comp2[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp2[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
 
             double[] weights2 = new double[2];
             weights2[0] = 2;
@@ -131,8 +114,8 @@ namespace HeuristicComparer
         static void Match5()
         {
             Bot[] comp = new Bot[2];
-            comp[0] = new Bot(5, moveFarEval);
-            comp[1] = new Bot(5, piecesInStrikingEval);
+            comp[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
 
             double[] weights = new double[2];
             weights[0] = 1;
@@ -142,8 +125,8 @@ namespace HeuristicComparer
             string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
 
             Bot[] comp2 = new Bot[2];
-            comp2[0] = new Bot(5, moveFarEval);
-            comp2[1] = new Bot(5, piecesInStrikingEval);
+            comp2[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp2[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
 
             double[] weights2 = new double[2];
             weights2[0] = 1;
@@ -158,8 +141,8 @@ namespace HeuristicComparer
         static void Match6()
         {
             Bot[] comp = new Bot[2];
-            comp[0] = new Bot(5, moveFarEval);
-            comp[1] = new Bot(5, piecesInStrikingEval);
+            comp[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
 
             double[] weights = new double[2];
             weights[0] = 1;
@@ -169,8 +152,8 @@ namespace HeuristicComparer
             string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
 
             Bot[] comp2 = new Bot[2];
-            comp2[0] = new Bot(5, moveFarEval);
-            comp2[1] = new Bot(5, piecesInStrikingEval);
+            comp2[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp2[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
 
             double[] weights2 = new double[2];
             weights2[0] = 1;
@@ -180,6 +163,87 @@ namespace HeuristicComparer
             string player2Description = "depth 5, 1 MoveFar, 3 PiecesInStriking";
 
             Compare(player1, player1Description, player2, player2Description, "5_1MoveFar_1PiecesInStriking_vs_5_1MoveFar_3PiecesInStriking");
+        }
+
+        static void Match7()
+        {
+            Bot[] comp = new Bot[2];
+            comp[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
+
+            double[] weights = new double[2];
+            weights[0] = 1;
+            weights[1] = 1;
+
+            CompositeBot player1 = new CompositeBot(comp, weights);
+            string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
+
+            Bot[] comp2 = new Bot[2];
+            comp2[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp2[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
+
+            double[] weights2 = new double[2];
+            weights2[0] = 3;
+            weights2[1] = 1;
+
+            CompositeBot player2 = new CompositeBot(comp2, weights2);
+            string player2Description = "depth 5, 3 MoveFar, 1 PiecesInStriking";
+
+            Compare(player1, player1Description, player2, player2Description, "5_1MoveFar_1PiecesInStriking_vs_5_3MoveFar_1PiecesInStriking");
+        }
+
+        static void Match8()
+        {
+            Bot[] comp = new Bot[2];
+            comp[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
+
+            double[] weights = new double[2];
+            weights[0] = 1;
+            weights[1] = 1;
+
+            CompositeBot player1 = new CompositeBot(comp, weights);
+            string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
+
+            Bot[] comp2 = new Bot[2];
+            comp2[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp2[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
+
+            double[] weights2 = new double[2];
+            weights2[0] = 1;
+            weights2[1] = 5;
+
+            CompositeBot player2 = new CompositeBot(comp2, weights2);
+            string player2Description = "depth 5, 1 MoveFar, 5 PiecesInStriking";
+
+            Compare(player1, player1Description, player2, player2Description, "5_1MoveFar_1PiecesInStriking_vs_5_1MoveFar_5PiecesInStriking");
+        }
+
+        static void Match9()
+        {
+            Bot[] comp = new Bot[2];
+            comp[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
+
+            double[] weights = new double[2];
+            weights[0] = 1;
+            weights[1] = 1;
+
+            CompositeBot player1 = new CompositeBot(comp, weights);
+            string player1Description = "depth 5, 1 MoveFar, 1 PiecesInStriking";
+
+            Bot[] comp2 = new Bot[2];
+            comp2[0] = new Bot(5, Heuristics.MoveFarEval);
+            comp2[1] = new Bot(5, Heuristics.PiecesInStrikingEval);
+
+            double[] weights2 = new double[2];
+            weights2[0] = 5;
+            weights2[1] = 1;
+
+            CompositeBot player2 = new CompositeBot(comp2, weights2);
+            string player2Description = "depth 5, 5 MoveFar, 1 PiecesInStriking";
+
+            Compare(player1, player1Description, player2, player2Description, "5_1MoveFar_1PiecesInStriking_vs_5_5MoveFar_1PiecesInStriking");
         }
 
         private static void Compare(IPlayer player1, string player1Description, IPlayer player2, string player2Description, string dir)
@@ -243,80 +307,6 @@ namespace HeuristicComparer
             output += "Player 2 Wins " + player2Wins;
 
             File.AppendAllText(path + "Output.txt", output);
-        }
-
-        private static double PiecesInStriking(GameState currentState, bool imPlayerTwo)
-        {
-            int numStriking = 0;
-            foreach (Piece myPiece in currentState.PiecePositions[Convert.ToInt32(imPlayerTwo)])
-            {
-                List<IMove> possibleMoves = myPiece.GetPossibleMoves(currentState);
-
-                foreach (IMove m in possibleMoves)
-                {
-                    if (imPlayerTwo && m.End.Y == 7)
-                    {
-                        numStriking += 1;
-                        break;
-                    }
-                    else if (!imPlayerTwo && m.End.Y == 0)
-                    {
-                        numStriking += 1;
-                        break;
-                    }
-                }
-            }
-
-            return ((double)numStriking) / 24.0;
-        }
-
-        private static double NumPossibleMoves(GameState currentState, bool imPlayerTwo)
-        {
-            int numPossible = 0;
-            for (int i = 0; i < 8; i++)
-            {
-                numPossible += currentState.PiecePositions[imPlayerTwo ? 1 : 0][i].GetPossibleMoves(currentState).Count;
-            }
-
-            return ((double)numPossible) / 102.0;
-        }
-
-        private static double MoveFar(GameState currentState, bool imPlayerTwo)
-        {
-            int score = 0;
-            for (int i = 0; i < 8; i++)
-            {
-                if (imPlayerTwo)
-                {
-                    score += currentState.PiecePositions[1][i].Position.Y;
-                }
-                else
-                {
-                    score += 7 - currentState.PiecePositions[0][i].Position.Y;
-                }
-            }
-
-            return ((double)score) / 48.0;
-        }
-
-        private static double NumPossibleColors(GameState currentState, bool imPlayerTwo)
-        {
-            double res = 0;
-            foreach (Piece myPiece in currentState.PiecePositions[imPlayerTwo ? 1 : 0])
-            {
-                int[] colorNumbers = new int[8];
-                foreach (IMove move in myPiece.GetPossibleMoves(currentState))
-                {
-                    colorNumbers[(int)Board.Tile[move.End.Y, move.End.X]]++;
-                }
-
-                for (int i = 0; i < colorNumbers.Length; i++)
-                {
-                    res += Math.Sign(colorNumbers[i]);
-                }
-            }
-
-            return res / 56.0;
         }
     }
 }

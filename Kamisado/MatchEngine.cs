@@ -21,6 +21,8 @@ namespace Kamisado
         private IPlayer _startingPlayer;
         private IPlayer _secondPlayer;
 
+        private Bot _regroupBot;
+
         public MatchEngine(IPlayer player1, IPlayer player2, int winScore)
         {
             _player1 = player1;
@@ -33,6 +35,8 @@ namespace Kamisado
 
             _engine = new GameEngine(_startingPlayer, _secondPlayer, new GameState());
             _matchInfo = new MatchInfo();
+
+            _regroupBot = new Bot(REGROUP_SEARCH_DEPTH, Heuristics.MoveFarEval);
         }
 
         public MatchInfo Run()
@@ -68,8 +72,8 @@ namespace Kamisado
                 GameState rightState = GameState.GenerateNextRound(_engine.CurrentState, false);
 
                 bool doLeft = true;
-                double leftValue = _secondPlayer.GetMove(leftState, REGROUP_SEARCH_DEPTH).Value;
-                double rightValue = _secondPlayer.GetMove(rightState, REGROUP_SEARCH_DEPTH).Value;
+                double leftValue = _regroupBot.GetMove(leftState).Value;
+                double rightValue = _regroupBot.GetMove(rightState).Value;
                 Debug.WriteLine("Left value: " + leftValue + ", right value: " + rightValue);
                 if (leftValue > rightValue)
                 {

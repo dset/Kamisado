@@ -105,44 +105,36 @@ namespace Kamisado
                 }
             }
 
-            for (int i = 0; i < _bots.Length; i++)
-            {
-                Debug.Write("Bot " + i + " has: ");
-                for (int j = 0; j < moveInfos[i].Length; j++)
-                {
-                    Debug.Write(moveInfos[i][j].Value + ", ");
-                }
-                Debug.WriteLine("");
-            }
-
-            // Make all values between -1 and 1
-            for (int i = 0; i < _bots.Length; i++)
-            {
-                for (int j = 0; j < moveInfos[i].Length; j++)
-                {
-                    if (moveInfos[i][j].Value < Double.MinValue / 10000)
-                    {
-                        continue;
-                    }
-                    else if (moveInfos[i][j].Value < 0)
-                    {
-                        moveInfos[i][j].Value = -(moveInfos[i][j].Value / lowestNonLosingValues[i]);
-                    }
-                    else if (moveInfos[i][j].Value > 0)
-                    {
-                        moveInfos[i][j].Value = moveInfos[i][j].Value / highestValues[i];
-                    }
-                }
-            }
 
             for (int i = 0; i < _bots.Length; i++)
             {
-                Debug.Write("Bot " + i + " has: ");
-                for (int j = 0; j < moveInfos[i].Length; j++)
+                List<int> indices = Enumerable.Range(0, moveInfos[i].Length).ToList();
+                indices.Sort((int ind1, int ind2) =>
+                    {
+                        if (moveInfos[i][ind1].Value < moveInfos[i][ind2].Value)
+                        {
+                            return -1;
+                        }
+                        else if (moveInfos[i][ind1].Value > moveInfos[i][ind2].Value)
+                        {
+                            return 1;
+                        }
+                        else
+                        {
+                            return 0;
+                        }
+                    });
+                int strength = 1;
+                for (int j = 0; j < indices.Count; j++)
                 {
-                    Debug.Write(moveInfos[i][j].Value + ", ");
+                    double tmp = moveInfos[i][indices[j]].Value;
+                    moveInfos[i][indices[j]].Value = strength;
+
+                    if (j + 1 < indices.Count && moveInfos[i][indices[j + 1]].Value != tmp)
+                    {
+                        strength++;
+                    }
                 }
-                Debug.WriteLine("");
             }
 
             // Combine values
@@ -153,15 +145,7 @@ namespace Kamisado
             {
                 for (int j = 0; j < _bots.Length; j++)
                 {
-                    if (moveInfos[j][i].Value < Double.MinValue / 10000)
-                    {
-                        combinedMoveValues[i] = moveInfos[j][i].Value;
-                        break;
-                    }
-                    else
-                    {
-                        combinedMoveValues[i] += _weights[j] * moveInfos[j][i].Value;
-                    }
+                    combinedMoveValues[i] += _weights[j] * moveInfos[j][i].Value;
                 }
 
                 if (combinedMoveValues[i] > highestCombined)
