@@ -28,6 +28,11 @@ namespace Kamisado
             return NumPossibleColors(currentState, imPlayerTwo) - NumPossibleColors(currentState, !imPlayerTwo);
         };
 
+        public static Func<GameState, bool, double> WantToPushEval = (currentState, imPlayerTwo) =>
+        {
+            return WantToPush(currentState, imPlayerTwo) - WantToPush(currentState, !imPlayerTwo);
+        };
+
         private static double PiecesInStriking(GameState currentState, bool imPlayerTwo)
         {
             int numStriking = 0;
@@ -96,6 +101,23 @@ namespace Kamisado
                 for (int i = 0; i < colorNumbers.Length; i++)
                 {
                     res += Math.Sign(colorNumbers[i]);
+                }
+            }
+
+            return res;
+        }
+
+        private static double WantToPush(GameState currentState, bool imPlayerTwo)
+        {
+            int res = 0;
+            foreach (Piece myPiece in currentState.PiecePositions[imPlayerTwo ? 1 : 0])
+            {
+                foreach (IMove move in myPiece.GetPossibleMoves(currentState))
+                {
+                    if (move.GetType() == typeof(SumoPushMove))
+                    {
+                        res++;
+                    }
                 }
             }
 
